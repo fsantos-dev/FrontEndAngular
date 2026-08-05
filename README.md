@@ -511,9 +511,11 @@ Si el token expiro el guard no deja entrar a una ruta, por ende ni si quiera hac
 # 10. Aquitectura
 
 ## service
+
 solo dispara la petición y devuelve el Observable crudo. Ni tap, ni catchError, ni nada. Es tan simple que casi no necesita tests más allá de "¿llama al endpoint correcto?".
 
 ## store
+
 se suscribe, y ahí sí va toda la lógica:
 
 - tap() para guardar token y actualizar signals
@@ -523,14 +525,13 @@ se suscribe, y ahí sí va toda la lógica:
 
 ---
 
-
 # 10. readOnly y asReadonly()
 
 - readOnly evita que una variable cambie su valor
 - en una senal evita reasignar con una nueva senal pero no evita modificar el valor de esa senal
 - en un objeto evita reasignar con un nuevo objeto, pero no evita modificar una propiedad de ese objeto
 
-Y asReadonly() 
+Y asReadonly()
 s un método que existe en cualquier WritableSignal y hace una sola cosa: te devuelve el mismo signal, pero con un tipo de TypeScript que ya no tiene .set() ni .update() en su firma pública.
 
 Antes
@@ -540,6 +541,7 @@ private readonly _loading = signal<boolean>(false);
 // Tipo: WritableSignal<boolean>
 // Tiene: _loading(), _loading.set(x), _loading.update(fn)
 ```
+
 Ahora
 
 ```typescript
@@ -561,7 +563,7 @@ Eso rompe la idea completa de tener un Store — el Store deja de ser la única 
 
 ---
 
-# 10. Computed()
+# 11. Computed()
 
 crea un signal cuyo valor no lo defines tú directamente, sino que se calcula automáticamente a partir de otros signals. Angular vigila de qué signals depende, y cada vez que alguno de esos cambia, el computed se recalcula solo — sin que tú tengas que hacer nada.
 
@@ -569,10 +571,10 @@ crea un signal cuyo valor no lo defines tú directamente, sino que se calcula au
 readonly isAuthenticated = computed(() => this._token() !== null && this._user() !== null);
 ```
 
-
 ---
 
-# 11. Inicizalizar un valor
+# 12. Inicizalizar un valor
+
 Hay 2 formas de inicializar un valor, en el constructor o en la senal, al final es lo mismo.
 
 ## Constructor
@@ -592,11 +594,12 @@ constructor(private authService: AuthService) {
 ```typescript
 private readonly userSignal = signal<User | null>(this.userService.get());
 ```
+
 ---
 
-# 12. Store: Multiples senales vs unico store
+# 13. Store: Multiples senales vs unico store
 
-tenemos 2 formas de crear nuestro store 
+tenemos 2 formas de crear nuestro store
 
 ## Multiples senales
 
@@ -641,7 +644,82 @@ readonly loading = computed(() => this.state().loading);
 readonly error = computed(() => this.state().error);
 ```
 
+---
 
+# 14. Tailwind
+
+- flex = display: flex;
+- min-h-screen = min-height: 100vh;
+- items-center = align-items: center; Centra verticalmente los hijos del Flex.
+- justify-center = justify-content: center; Centra horizontalmente los hijos del Flex.
+- bg-gray-100 = background: #f3f4f6;
+- w-96 = ancho
+- shadow-lg = box-shadow, una sombra grande
+- text-center = text-align:center;
+- font-bold = font-weight:700;
+- text-2xl = font-size: 24px;
+- mb-5 = margin-bottom:1.5rem;
+- block = display:block:
+- w-full = width : 100%;
+- mt-4 = margin-top
+- p-3 = padding : todos los lados
+- rounded-md = Bordes redondeados.
+- text-gray-600 = texto gris
+- hover:underline = text-decoration: underline;
+
+---
+
+# 15. Rxjs
+
+- pipe()
+  pipe permite agregar operadores de RxJS,
+  puedes imaginarlo como una tubería.
+
+observable.pipe(...).
+
+- finalize()
+  Es un operador va dentro de un pipe y se ejecuta siempre al terminar el Observable.
+  No importa si salio bien o mal
+
+- takeUntilDestroyed()
+  Es un operador va dentro de un pipe, Este operador es exclusivo de Angular(this.destroyRef).
+  takeUntilDestroyed(this.destroyRef)
+  Cancela automáticamente la suscripción cuando el componente o servicio se destruye. para evitar fugas de memoria.
+
+- subscribe(...)
+  Aquí sí empieza todo.
+  Sin subscribe: un observable no hace nada.
+  Con subscribe: observable hace la peticion HTTP y espera la respuesta.
+
+- next
+  Se ejecuta cuando todo salió bien. va dentro del susbcribe
+  next: (response) => {
+
+}
+
+- error
+  Se ejecuta cuando el servidor responde con error. va dentro del subscribe
+  error: (err) => {
+
+}
+
+---
+
+# 16. primeNg
+
+- p-card = Tarjeta con estilos prediseñados
+- pInputText = Aplica el estilo de PrimeNG a un <input>
+- p-password = Campo de contraseña con funcionalidades como mostrar/ocultar el texto y validaciones visuales
+- [toggleMask]="true" = Muestra el ícono para revelar u ocultar la contraseña
+- p-button = Botón con estilos y estados (loading, disabled, etc.)
+- p-password = Contraseñas.
+- p-inputnumber = Números.
+- p-inputmask = Campos con máscara (teléfono, documento, etc.).
+- p-textarea = Área de texto.
+- p-datepicker = Selector de fecha.
+- p-select = Lista desplegable.
+- p-autocomplete = Autocompletado.
+- fluid = para dar ancho a inputs de ngprime ya que w-full no funciona por que no son inputs puros.
 
 # 📌 Resumen
 
