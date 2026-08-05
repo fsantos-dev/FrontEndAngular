@@ -69,15 +69,6 @@ La opción B es el estándar en la mayoría de proyectos serios, especialmente e
 
 ---
 
-# 📌 Resumen
-
-| Tema             | Opciones                                                                       |
-| ---------------- | ------------------------------------------------------------------------------ |
-| DATA User(login) | Mismo servicio que responde el token / Un servicio adiconal que lo haga aparte |
-
----
-
-> **Nota:** No existe una única arquitectura "correcta". La elección entre estas alternativas dependerá del tamaño del proyecto, los estándares del equipo, los requisitos del negocio y el equilibrio entre simplicidad, mantenibilidad y escalabilidad.
 
 # 2. constructor vs injeccion
 
@@ -235,7 +226,7 @@ export const APP_CONFIG = {
 Todos los servicios reciben ya la URL correcta.
 
 
-# 3. Seguridad de cualquier llave, json de conexion e informacion sensible, 
+# 4. Seguridad de cualquier llave, json de conexion e informacion sensible, 
 La regla de oro que se usa en la industria
 
 Una pregunta muy simple:
@@ -277,3 +268,19 @@ Lo correcto es levantar la mano y decir algo como:
 "Hay un riesgo de seguridad. Esas credenciales quedarían expuestas porque el código se ejecuta en el navegador. ¿El proveedor ofrece un SDK para frontend, OAuth o una clave pública para hacerlo de manera segura? Si no, sería más seguro hacer la integración desde el backend."
 
 Eso no significa negarte a desarrollar la funcionalidad, sino informar del riesgo y proponer una alternativa más segura.
+
+---
+
+# 📌 Resumen
+
+| Tema             | Opciones                                                                       |
+| ---------------- | ------------------------------------------------------------------------------ |
+| **1. DATA User(login)** | Mismo servicio que responde el token / Un servicio adiconal que lo haga aparte |
+| **2. Constructor vs `inject()`** | Ambos son válidos. En Angular moderno se suele preferir `inject()` por reducir código y facilitar algunos escenarios de pruebas e inicialización. |
+| **3. Configuración de environments** | Mantener ambientes separados (Dev, QA y Prod) con una interfaz común y configurar `angular.json` y los scripts de `package.json` para cada entorno. |
+| **4. APP_CONFIG centralizado** | Centralizar el acceso a la configuración de la aplicación mediante un único punto (`APP_CONFIG`) para evitar dependencias directas de `environment` y facilitar futuros cambios. |
+| **5. Seguridad de credenciales** | Nunca exponer secretos, contraseñas, API Keys privadas o credenciales en el frontend. Las integraciones con proveedores externos deben realizarse desde el backend y almacenar los secretos en un gestor seguro (Vault, User Secrets, Azure Key Vault, etc.). |
+
+---
+
+> **Nota:** No existe una única arquitectura "correcta". La elección entre estas alternativas dependerá del tamaño del proyecto, los estándares del equipo, los requisitos del negocio y el equilibrio entre simplicidad, mantenibilidad y escalabilidad.
