@@ -99,7 +99,7 @@ export class AuthService {
 }
 ```
 
-# 2. Configuracion de environments
+# 3. Configuracion de environments
 
 Una carpeta de environments, con los tres ambientes Prod, Dev y QA y ppreferiblemente con una interfaz para todos
 
@@ -192,7 +192,7 @@ Para cuando se ejecute ng build --configuration 'ambiente'
   },
 ```
 
-# 3. Crear un archivo central.
+# 4. Crear un archivo central.
 
 - Tenemos el escenario en el que todos dependen directamente de environment. Si mañana decides cambiar la forma de obtener la configuración (por ejemplo, desde un config.json o un servicio), tendrás que modificar muchos archivos.
   entonces teniendo un APP_CONFIG. en el core Ahora toda la aplicación conoce únicamente APP_CONFIG, como unico punto de acesso.
@@ -226,7 +226,7 @@ export const APP_CONFIG = {
 Todos los servicios reciben ya la URL correcta.
 
 
-# 4. Seguridad de cualquier llave, json de conexion e informacion sensible, 
+# 5. Seguridad de cualquier llave, json de conexion e informacion sensible, 
 La regla de oro que se usa en la industria
 
 Una pregunta muy simple:
