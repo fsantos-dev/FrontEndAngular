@@ -7,7 +7,7 @@ export interface Categoria {
 }
 
 
-export interface CrarActualizarCategoria {
+export interface CrearActualizarCategoria {
     name: string;
     description?: string | null;
 }

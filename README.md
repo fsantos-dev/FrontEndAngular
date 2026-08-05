@@ -69,7 +69,6 @@ La opción B es el estándar en la mayoría de proyectos serios, especialmente e
 
 ---
 
-
 # 2. constructor vs injeccion
 
 ## Constructor
@@ -209,13 +208,14 @@ export const APP_CONFIG = {
 ```
 
 - También centralizas transformaciones
-Supongamos que mañana quieres que la URL nunca termine en /.
+  Supongamos que mañana quieres que la URL nunca termine en /.
 
 En vez de hacer esto en cada servicio:
 
 ```typescript
-environment.apiUrl.replace(/\/$/, '')
+environment.apiUrl.replace(/\/$/, '');
 ```
+
 lo haces una sola vez:
 
 ```typescript
@@ -223,10 +223,11 @@ export const APP_CONFIG = {
   apiUrl: environment.apiUrl.replace(/\/$/, ''),
 };
 ```
+
 Todos los servicios reciben ya la URL correcta.
 
+# 5. Seguridad de cualquier llave, json de conexion e informacion sensible,
 
-# 5. Seguridad de cualquier llave, json de conexion e informacion sensible, 
 La regla de oro que se usa en la industria
 
 Una pregunta muy simple:
@@ -242,20 +243,18 @@ Una pregunta muy simple:
 
 - Encriptar las llaves en angular y dejarlas ahi mismo aun sigue siendo inseguro, eso ofusca la informacion y al hace mas dificil entenderla pero no evita el problema. las llaves de encriptacion igual estaran en el front o tendran que llegar ahi para poder desencriptarla.
 
-
 > 💡 **La regla que usan los arquitectos de software**
 
 Existe una frase muy conocida en el desarrollo de software:
 
 > **"Never trust the client."**  
-> *"Nunca confíes en el cliente."*
+> _"Nunca confíes en el cliente."_
 
 ### ¿Qué significa?
 
 El **cliente (frontend o navegador)** está bajo el control del usuario, **no de tu empresa**.
 
 Por esa razón, **nunca debes asumir que la información enviada desde el frontend es correcta, segura o confiable**. Todas las validaciones críticas y reglas de negocio deben verificarse nuevamente en el **backend**.
-
 
 ## ¿Qué haría un desarrollador profesional?
 
@@ -271,15 +270,95 @@ Eso no significa negarte a desarrollar la funcionalidad, sino informar del riesg
 
 ---
 
+# 5. Observable
+
+Se recomienda el los servicios http retornar un observable para poder suscribirme donde se va a utilizar el servicio
+
+Ojo si no retornamos observable y retornamos por ejemplo void aquí hay un problema importante.
+HttpClient devuelve un Observable, pero tú lo estás ignorando.
+
+```typescript
+login(credentials: LoginRequest): void {
+
+    this.http.post<LoginResponse>(url, credentials)
+        .subscribe(response => {
+            console.log(response);
+        });
+
+}
+```
+
+Nadie podrá hacer:
+
+```typescript
+this.authService.login(data).subscribe(...);
+```
+
+Porque ahora la función devuelve void.
+
+## ✅Opción A: Suscribirse dentro del servicio (menos flexible)
+
+```typescript
+login(credentials: LoginRequest): void {
+
+    this.http.post<LoginResponse>(url, credentials)
+        .subscribe(response => {
+            console.log(response);
+        });
+
+}
+```
+
+Esto funciona, pero el componente ya no puede reaccionar al resultado.
+
+No puede saber:
+
+- si el login fue exitoso,
+- si ocurrió un error,
+- cuándo terminó la petición.
+
+Toda esa lógica queda "encerrada" en el servicio.
+
+## ✅Opción A: Retornar el Observable (la práctica más común)
+
+```typescript
+login(credentials: LoginRequest): Observable<LoginResponse> {
+
+    return this.http.post<LoginResponse>(url, credentials);
+
+}
+```
+
+Ahora quien llame al servicio decide qué hacer.
+
+Por ejemplo, en un Store:
+
+```typescript
+this.authService.login(data).subscribe({
+  next: (response) => {
+    // Guardar token
+  },
+  error: (err) => {
+    // Mostrar mensaje
+  },
+});
+```
+
+## Recomendación
+un servicio debe encargarse de comunicarse con la API, no de decidir qué hacer con la respuesta. Al devolver un Observable, el mismo método puede reutilizarse desde distintos componentes o Stores, cada uno manejando el resultado según sus necesidades. Esa separación de responsabilidades hace el código más limpio, reutilizable y fácil de mantener.
+
+
+---
+
 # 📌 Resumen
 
-| Tema             | Opciones                                                                       |
-| ---------------- | ------------------------------------------------------------------------------ |
-| **1. DATA User(login)** | Mismo servicio que responde el token / Un servicio adiconal que lo haga aparte |
-| **2. Constructor vs `inject()`** | Ambos son válidos. En Angular moderno se suele preferir `inject()` por reducir código y facilitar algunos escenarios de pruebas e inicialización. |
-| **3. Configuración de environments** | Mantener ambientes separados (Dev, QA y Prod) con una interfaz común y configurar `angular.json` y los scripts de `package.json` para cada entorno. |
-| **4. APP_CONFIG centralizado** | Centralizar el acceso a la configuración de la aplicación mediante un único punto (`APP_CONFIG`) para evitar dependencias directas de `environment` y facilitar futuros cambios. |
-| **5. Seguridad de credenciales** | Nunca exponer secretos, contraseñas, API Keys privadas o credenciales en el frontend. Las integraciones con proveedores externos deben realizarse desde el backend y almacenar los secretos en un gestor seguro (Vault, User Secrets, Azure Key Vault, etc.). |
+| Tema                                 | Opciones                                                                                                                                                                                                                                                      |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1. DATA User(login)**              | Mismo servicio que responde el token / Un servicio adiconal que lo haga aparte                                                                                                                                                                                |
+| **2. Constructor vs `inject()`**     | Ambos son válidos. En Angular moderno se suele preferir `inject()` por reducir código y facilitar algunos escenarios de pruebas e inicialización.                                                                                                             |
+| **3. Configuración de environments** | Mantener ambientes separados (Dev, QA y Prod) con una interfaz común y configurar `angular.json` y los scripts de `package.json` para cada entorno.                                                                                                           |
+| **4. APP_CONFIG centralizado**       | Centralizar el acceso a la configuración de la aplicación mediante un único punto (`APP_CONFIG`) para evitar dependencias directas de `environment` y facilitar futuros cambios.                                                                              |
+| **5. Seguridad de credenciales**     | Nunca exponer secretos, contraseñas, API Keys privadas o credenciales en el frontend. Las integraciones con proveedores externos deben realizarse desde el backend y almacenar los secretos en un gestor seguro (Vault, User Secrets, Azure Key Vault, etc.). |
 
 ---
 
