@@ -10,7 +10,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
-    
   private readonly router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private readonly authService = inject(AuthService);
@@ -53,8 +52,9 @@ export class AuthStore {
       .subscribe({
         next: (response) => {
           this.saveSession(response);
+          this.router.navigate(['/categorias']);
         },
-        error: (err : HttpErrorResponse) => {
+        error: (err: HttpErrorResponse) => {
           this.errorSignal.set(this.extractError(err, 'Error al iniciar sesión'));
         },
       });
@@ -74,7 +74,7 @@ export class AuthStore {
         next: (response) => {
           this.saveSession(response);
         },
-        error: (err : HttpErrorResponse) => {
+        error: (err: HttpErrorResponse) => {
           this.errorSignal.set(this.extractError(err, 'Error al registrarse'));
         },
       });
@@ -84,7 +84,6 @@ export class AuthStore {
     this.tokenService.clear();
     this.router.navigate(['/auth/login']);
   }
-
 
   private extractError(err: HttpErrorResponse, fallback: string): string {
     return err?.error?.message ?? fallback;
