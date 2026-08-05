@@ -270,7 +270,19 @@ Eso no significa negarte a desarrollar la funcionalidad, sino informar del riesg
 
 ---
 
-# 5. Observable
+# 6. Observable
+
+Un Observable es alguien que te avisa cuando pasa algo.
+El Observable es la fuente de los datos
+El subscribe() es quien escucha esa fuente.
+
+La emisora está transmitiendo música todo el día.
+Esa emisora sería el Observable.
+
+Pero tú no escuchas nada hasta que enciendes la radio.
+Encender la radio sería hacer: Suscribe()
+
+Subscribe siempre tiene que subscribirse a un observable
 
 Se recomienda el los servicios http retornar un observable para poder suscribirme donde se va a utilizar el servicio
 
@@ -345,20 +357,171 @@ this.authService.login(data).subscribe({
 ```
 
 ## Recomendación
+
 un servicio debe encargarse de comunicarse con la API, no de decidir qué hacer con la respuesta. Al devolver un Observable, el mismo método puede reutilizarse desde distintos componentes o Stores, cada uno manejando el resultado según sus necesidades. Esa separación de responsabilidades hace el código más limpio, reutilizable y fácil de mantener.
 
+---
+
+# 7. Almacenamiento de token
+
+Lo mas recomendable es centralizar el almacenamiento del token en un servicio y no usar directamente LocalStorage
+en cada lugar que se necesita
+
+Porque mañana la empresa puede decidir:
+
+usar localStorage (la mas usada)
+usar cookies HttpOnly ( La mas segura, aqui el fronted/cliente no lo ve)
+usar sessionStorage
+usar IndexedDB
+guardar el token solo en memoria
+
+Si tienes 50 llamadas a localStorage, tendrás que cambiarlas todas.
+
+Si tienes un único TokenService, cambias solo este archivo.
+
+```typescript
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TokenService {
+  private readonly TOKEN_KEY = 'access_token';
+
+  get(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  set(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, token);
+  }
+
+  clear(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
+  }
+}
+```
+
+El interceptor simplemente dice:
+
+"Si tengo token, lo agrego. Si no tengo, envío la petición tal como fue creada."
+
+Quien decide si esa petición está autorizada es el servidor.
+
+# 8. Interceptors
+
+Un Interceptor en Angular es una pieza de código que intercepta todas las peticiones HTTP que salen de tu aplicación y todas las respuestas que regresan del servidor, permitiéndote ejecutar lógica antes o después de que ocurra la comunicación.
+
+✅ AuthInterceptor → Agrega el JWT a todas las peticiones.
+
+con el siguiente interceptor seteamos el token para todos los consumos de servicios
+
+```typescript
+import { inject } from '@angular/core';
+import { HttpInterceptorFn } from '@angular/common/http';
+
+import { TokenService } from '../services/token.service';
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const tokenService = inject(TokenService);
+
+  const token = tokenService.get();
+
+  if (!token) {
+    return next(req);
+  }
+
+  const authRequest = req.clone({
+    setHeaders: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return next(authRequest);
+};
+```
+
+- En lugar de hacer esto en cada servicio:
+
+```typescript
+this.http.get('/users', {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+```
+
+-El interceptor lo hace una sola vez:
+
+```typescript
+const clonedReq = req.clone({
+  setHeaders: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+
+return next(clonedReq);
+```
+
+✅ ErrorInterceptor → Si el backend dice 401, hace logout y redirige al login.
+Cuando se hace una peticion http de cualquier servicio este interceptor valida si el token aun es valido
+
+- El token expiró.
+- El token fue revocado. (
+  El usuario cambió la contraseña.
+  El administrador bloqueó la cuenta.
+  El usuario cerró sesión desde otro dispositivo.
+  El backend invalidó todos los tokens.)
+- La firma del JWT es inválida.
+- El token fue modificado.
+- El usuario fue deshabilitado.
+- El token pertenece a otra aplicación (audience incorrecta).
+- El emisor (issuer) no es válido.
+
+```typescript
+import { inject } from '@angular/core';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { catchError, throwError } from 'rxjs';
+import { AuthService } from '../services/auth.service';
+
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+
+  return next(req).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 401) {
+        authService.logout();
+      }
+      return throwError(() => error);
+    }),
+  );
+};
+```
+
+---
+
+# 9. Guards(proteccion de rutas)
+
+✅ Guard → Protege las rutas comprobando que haya una sesión válida (generalmente token existente + no expirado).
+
+Si el token expiro el guard no deja entrar a una ruta, por ende ni si quiera hace la peticion al backend en cambio el interceptor si hace una peticion al backend y borra el token de localstorage y retorna al login, ambos trabajan juntos de la mano el guard y el interceptor
 
 ---
 
 # 📌 Resumen
 
-| Tema                                 | Opciones                                                                                                                                                                                                                                                      |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **1. DATA User(login)**              | Mismo servicio que responde el token / Un servicio adiconal que lo haga aparte                                                                                                                                                                                |
-| **2. Constructor vs `inject()`**     | Ambos son válidos. En Angular moderno se suele preferir `inject()` por reducir código y facilitar algunos escenarios de pruebas e inicialización.                                                                                                             |
-| **3. Configuración de environments** | Mantener ambientes separados (Dev, QA y Prod) con una interfaz común y configurar `angular.json` y los scripts de `package.json` para cada entorno.                                                                                                           |
-| **4. APP_CONFIG centralizado**       | Centralizar el acceso a la configuración de la aplicación mediante un único punto (`APP_CONFIG`) para evitar dependencias directas de `environment` y facilitar futuros cambios.                                                                              |
-| **5. Seguridad de credenciales**     | Nunca exponer secretos, contraseñas, API Keys privadas o credenciales en el frontend. Las integraciones con proveedores externos deben realizarse desde el backend y almacenar los secretos en un gestor seguro (Vault, User Secrets, Azure Key Vault, etc.). |
+| Tema                                                                                                                          | Opciones                                                                                                                                                                                                                                                      |
+| ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1. DATA User(login)**                                                                                                       | Mismo servicio que responde el token / Un servicio adiconal que lo haga aparte                                                                                                                                                                                |
+| **2. Constructor vs `inject()`**                                                                                              | Ambos son válidos. En Angular moderno se suele preferir `inject()` por reducir código y facilitar algunos escenarios de pruebas e inicialización.                                                                                                             |
+| **3. Configuración de environments**                                                                                          | Mantener ambientes separados (Dev, QA y Prod) con una interfaz común y configurar `angular.json` y los scripts de `package.json` para cada entorno.                                                                                                           |
+| **4. APP_CONFIG centralizado**                                                                                                | Centralizar el acceso a la configuración de la aplicación mediante un único punto (`APP_CONFIG`) para evitar dependencias directas de `environment` y facilitar futuros cambios.                                                                              |
+| **5. Seguridad de credenciales**                                                                                              | Nunca exponer secretos, contraseñas, API Keys privadas o credenciales en el frontend. Las integraciones con proveedores externos deben realizarse desde el backend y almacenar los secretos en un gestor seguro (Vault, User Secrets, Azure Key Vault, etc.). |
+| **6. Observable**                                                                                                             | Un Observable es alguien que te avisa cuando pasa algo.                                                                                                                                                                                                       |
+| en cada lugar que se necesita, lo ams usado es guardarlo en el localstorage, peor es mas seguro guardarlo en Cookies HttpOnly |
+| **7. Almacenamiento de token**                                                                                                | Lo mas recomendable es centralizar el almacenamiento del token en un servicio y no usar directamente LocalStorage                                                                                                                                             |
+| en cada lugar que se necesita, lo ams usado es guardarlo en el localstorage, peor es mas seguro guardarlo en Cookies HttpOnly |
+| **7. Interceptors**                                                                                                           | Un Interceptor en Angular es una pieza de código que intercepta todas las peticiones HTTP que salen de tu aplicación y todas las respuestas que regresan del servidor, permitiéndote ejecutar lógica antes o después de que ocurra la comunicación.           |
 
 ---
 
