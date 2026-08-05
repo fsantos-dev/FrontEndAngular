@@ -6,26 +6,19 @@ import {
   LoginResponse,
   RegisterRequest,
   RegisterResponse,
-} from '../../features/auth/models/auth.model';
+} from './models/auth.model';
 import { APP_CONFIG } from '../config/app.config';
-import { TokenService } from './token.service';
-import { Router } from '@angular/router';
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly tokenService = inject(TokenService);
-  private readonly router = inject(Router);
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${APP_CONFIG.apiUrl}/login`, credentials);
   }
 
-  register(userData: RegisterRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${APP_CONFIG.apiUrl}/register`, userData);
+  register(userData: RegisterRequest): Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>(`${APP_CONFIG.apiUrl}/register`, userData);
   }
 
-  logout(): void {
-    this.tokenService.clear();
-    this.router.navigate(['/auth/login']);
-  }
 }
