@@ -22,8 +22,8 @@ export class CategoriaService {
         return this.http.post<Categoria>(`${APP_CONFIG.apiUrl}/categories`, categoria);
     }
 
-    update(categoria: CrearActualizarCategoria): Observable<Categoria>{
-        return this.http.put<Categoria>(`${APP_CONFIG.apiUrl}/categories`, categoria);
+    update(id: number, categoria: CrearActualizarCategoria): Observable<Categoria>{
+        return this.http.put<Categoria>(`${APP_CONFIG.apiUrl}/categories/${id}`, categoria);
     }
 
     delete(id: number): Observable<void> {

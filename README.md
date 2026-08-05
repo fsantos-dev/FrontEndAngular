@@ -508,6 +508,141 @@ Si el token expiro el guard no deja entrar a una ruta, por ende ni si quiera hac
 
 ---
 
+# 10. Aquitectura
+
+## service
+solo dispara la petición y devuelve el Observable crudo. Ni tap, ni catchError, ni nada. Es tan simple que casi no necesita tests más allá de "¿llama al endpoint correcto?".
+
+## store
+se suscribe, y ahí sí va toda la lógica:
+
+- tap() para guardar token y actualizar signals
+- catchError() para transformar errores en algo que la UI pueda mostrar
+- Navegación
+- Cualquier side-effect
+
+---
+
+
+# 10. readOnly y asReadonly()
+
+- readOnly evita que una variable cambie su valor
+- en una senal evita reasignar con una nueva senal pero no evita modificar el valor de esa senal
+- en un objeto evita reasignar con un nuevo objeto, pero no evita modificar una propiedad de ese objeto
+
+Y asReadonly() 
+s un método que existe en cualquier WritableSignal y hace una sola cosa: te devuelve el mismo signal, pero con un tipo de TypeScript que ya no tiene .set() ni .update() en su firma pública.
+
+Antes
+
+```typescript
+private readonly _loading = signal<boolean>(false);
+// Tipo: WritableSignal<boolean>
+// Tiene: _loading(), _loading.set(x), _loading.update(fn)
+```
+Ahora
+
+```typescript
+readonly loading = this._loading.asReadonly();
+// Tipo: Signal<boolean>
+// Tiene: loading()  ← solo lectura
+// NO tiene: .set() ni .update() en el tipo público
+```
+
+Punto clave que ya viste antes con readonly, pero aquí aplica igual: asReadonly() no crea una copia ni un signal nuevo independiente — es una vista sobre el mismo signal original. Cuando _loading cambia (por dentro del Store, con .set()), loading() (la vista pública) refleja ese cambio automáticamente, porque en el fondo son el mismo dato reactivo.
+
+Por qué importa en la práctica: si no usaras asReadonly() y expusieras _loading directo como público, cualquier componente podría hacer:
+
+```typescript
+this.authStore.loading.set(true); // Componente manipulando el estado del Store directamente 😬
+```
+
+Eso rompe la idea completa de tener un Store — el Store deja de ser la única fuente de verdad si cualquiera de afuera puede cambiarlo a su antojo. Con asReadonly(), el componente solo puede leer (authStore.loading()), y la única forma de que ese valor cambie es que el propio AuthStore decida cambiarlo internamente (ej. dentro de login()), que es exactamente el control que quieres en una arquitectura seria.
+
+---
+
+# 10. Computed()
+
+crea un signal cuyo valor no lo defines tú directamente, sino que se calcula automáticamente a partir de otros signals. Angular vigila de qué signals depende, y cada vez que alguno de esos cambia, el computed se recalcula solo — sin que tú tengas que hacer nada.
+
+```typescript
+readonly isAuthenticated = computed(() => this._token() !== null && this._user() !== null);
+```
+
+
+---
+
+# 11. Inicizalizar un valor
+Hay 2 formas de inicializar un valor, en el constructor o en la senal, al final es lo mismo.
+
+## Constructor
+
+```typescript
+constructor(private authService: AuthService) {
+    // Restaurar sesión desde localStorage al cargar la app
+    const storedUser = this.userService.get();
+    if (storedUser) {
+      this.userSignal.set(storedUser);
+    }
+  }
+```
+
+## Inicializar en senal
+
+```typescript
+private readonly userSignal = signal<User | null>(this.userService.get());
+```
+---
+
+# 12. Store: Multiples senales vs unico store
+
+tenemos 2 formas de crear nuestro store 
+
+## Multiples senales
+
+- Muy fácil de entender
+- Menos código
+- Ideal para estados pequeños
+
+```typescript
+// Estados privados solo el store debe tener acceso a el
+private readonly userSignal = signal<User | null>(null);
+private readonly loadingSignal = signal(false);
+private readonly errorSignal = signal<string | null>(null);
+
+// Selectores publicos
+readonly user = this.userSignal.asReadonly();
+readonly loading = this.loadingSignal.asReadonly();
+readonly error = this.errorSignal.asReadonly();
+```
+
+## Unico store
+
+- Se parece muchísimo a NgRx
+- Escala mejor
+- Actualizaciones atómicas
+- Más fácil de serializar
+
+```typescript
+interface AuthState {
+  user: User | null;
+  loading: boolean;
+  error: string | null;
+}
+
+private readonly state = signal<AuthState>({
+  user: null,
+  loading: false,
+  error: null,
+});
+
+readonly user = computed(() => this.state().user);
+readonly loading = computed(() => this.state().loading);
+readonly error = computed(() => this.state().error);
+```
+
+
+
 # 📌 Resumen
 
 | Tema                                                                                                                          | Opciones                                                                                                                                                                                                                                                      |

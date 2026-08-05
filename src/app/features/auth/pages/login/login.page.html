@@ -1,0 +1,74 @@
+<div class="flex min-h-screen items-center justify-center bg-gray-100">
+  <p-card class="w-96 shadow-lg">
+    <div class="text-center text-2xl font-bold mb-6">Iniciar Sesión</div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <!-- Email -->
+      <div class="mb-4">
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-1"
+          >Correo Electrónico</label
+        >
+        <input
+          id="email"
+          type="email"
+          pInputText
+          formControlName="email"
+          placeholder="admin@example.com"
+          class="w-full"
+        />
+        <div
+          *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          class="text-sm text-red-500 mt-1"
+        >
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">El correo es obligatorio</span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">Ingrese un correo válido</span>
+        </div>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="mb-4">
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1"
+          >Contraseña</label
+        >
+          <p-password
+            id="password"
+            formControlName="password"
+            [toggleMask]="true"
+            placeholder="Ingrese su contraseña"
+            fluid
+          />
+        <div
+          *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          class="text-sm text-red-500 mt-1"
+        >
+          <span *ngIf="loginForm.get('password')?.errors?.['required']"
+            >La contraseña es obligatoria</span
+          >
+          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres</span>
+        </div>
+      </div>
+
+      <!-- Botón de envío -->
+      <div class="flex justify-between items-center">
+        <p-button
+          type="submit"
+          label="Iniciar Sesión"
+          [loading]="authStore.loading()"
+          [disabled]="loginForm.invalid"
+          class="w-full"
+        />
+      </div>
+
+      <!-- Mensaje de error del store -->
+      <div *ngIf="authStore.error()" class="mt-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
+        {{ authStore.error() }}
+      </div>
+
+      <!-- Enlace a registro -->
+      <div class="mt-4 text-center text-sm text-gray-600">
+        ¿No tienes cuenta?
+        <a routerLink="/auth/register" class="text-blue-600 hover:underline">Regístrate aquí</a>
+      </div>
+    </form>
+  </p-card>
+</div>
