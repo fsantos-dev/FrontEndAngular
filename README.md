@@ -161,7 +161,7 @@ export const environment: Environment = {
 ```
 
 y configurar el angular.json para que se adapte al enviroment en el ambiente correspondiente
-Para cuando se ejecute ng build --configuration production
+Para cuando se ejecute ng build --configuration 'ambiente'
 
 ```typescript
 "build": {
@@ -201,7 +201,7 @@ Para cuando se ejecute ng build --configuration production
   },
 ```
 
-# 2. Crear un archivo central.
+# 3. Crear un archivo central.
 
 - Tenemos el escenario en el que todos dependen directamente de environment. Si mañana decides cambiar la forma de obtener la configuración (por ejemplo, desde un config.json o un servicio), tendrás que modificar muchos archivos.
   entonces teniendo un APP_CONFIG. en el core Ahora toda la aplicación conoce únicamente APP_CONFIG, como unico punto de acesso.
@@ -233,3 +233,47 @@ export const APP_CONFIG = {
 };
 ```
 Todos los servicios reciben ya la URL correcta.
+
+
+# 3. Seguridad de cualquier llave, json de conexion e informacion sensible, 
+La regla de oro que se usa en la industria
+
+Una pregunta muy simple:
+
+¿Si un usuario abre las herramientas del navegador y ve este valor, pasa algo?
+
+- No pasa nada → puede estar en Angular (environment, APP_CONFIG o app.config.json).
+- Sí pasa algo → debe quedarse en el backend (ASP.NET, Vault, User Secrets, Azure Key Vault, etc.).
+
+- Entonces tenemos un escenario si un proveedor por ejemplo punto red nos entrega sus servicios y nos da credenciales de conexion y password, este consumo no deberia hacerse desde el front(angular), debe hacerse desde el back y exponer un servicio al front asi el le entrega solo lo que necesita al back y el back hace la peticion al proveedor.
+
+- Nunca debe guardar o enviar esas credenciales al front debe todo guadrase en un vault en el back
+
+- Encriptar las llaves en angular y dejarlas ahi mismo aun sigue siendo inseguro, eso ofusca la informacion y al hace mas dificil entenderla pero no evita el problema. las llaves de encriptacion igual estaran en el front o tendran que llegar ahi para poder desencriptarla.
+
+
+> 💡 **La regla que usan los arquitectos de software**
+
+Existe una frase muy conocida en el desarrollo de software:
+
+> **"Never trust the client."**  
+> *"Nunca confíes en el cliente."*
+
+### ¿Qué significa?
+
+El **cliente (frontend o navegador)** está bajo el control del usuario, **no de tu empresa**.
+
+Por esa razón, **nunca debes asumir que la información enviada desde el frontend es correcta, segura o confiable**. Todas las validaciones críticas y reglas de negocio deben verificarse nuevamente en el **backend**.
+
+
+## ¿Qué haría un desarrollador profesional?
+
+Si en una reunión te dicen:
+
+"El frontend va a consumir directamente Puntored con este usuario y contraseña."
+
+Lo correcto es levantar la mano y decir algo como:
+
+"Hay un riesgo de seguridad. Esas credenciales quedarían expuestas porque el código se ejecuta en el navegador. ¿El proveedor ofrece un SDK para frontend, OAuth o una clave pública para hacerlo de manera segura? Si no, sería más seguro hacer la integración desde el backend."
+
+Eso no significa negarte a desarrollar la funcionalidad, sino informar del riesgo y proponer una alternativa más segura.
