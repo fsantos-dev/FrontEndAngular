@@ -4,14 +4,15 @@ import { providePrimeNG } from 'primeng/config';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import Aura from '@primeuix/themes/aura';
 import { routes } from './app.routes';
-import { authInterceptor } from './core/interceptors/auth.interceptors';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { httpLoggerInterceptor } from './core/interceptors/http-logger.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor, httpLoggerInterceptor])),
     providePrimeNG({
       theme: {
         preset: Aura,

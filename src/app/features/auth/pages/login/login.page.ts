@@ -7,6 +7,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
+import { InputPasswordModule } from 'primeng/inputpassword';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-login-page',
@@ -18,12 +20,20 @@ import { CommonModule } from '@angular/common';
     InputTextModule,
     PasswordModule,
     CardModule,
+    InputPasswordModule,
+    SelectModule
   ],
   templateUrl: './login.page.html',
   styleUrl: './login.page.scss',
 })
 export class LoginPage {
   loginForm: FormGroup;
+
+  countries = [
+  { name: 'Colombia', code: 'CO' },
+  { name: 'México', code: 'MX' },
+  { name: 'Argentina', code: 'AR' }
+];
 
   constructor(
     private fb: FormBuilder,
@@ -38,7 +48,6 @@ export class LoginPage {
 
   onSubmit(): void {
     if (this.loginForm.invalid) return;
-
     const credentials = this.loginForm.value;
     this.authStore.login(credentials);
   }

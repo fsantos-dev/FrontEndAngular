@@ -86,6 +86,6 @@ export class AuthStore {
   }
 
   private extractError(err: HttpErrorResponse, fallback: string): string {
-    return err?.error?.message ?? fallback;
+    return err?.error?.detail ?? fallback;
   }
 }

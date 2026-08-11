@@ -239,7 +239,7 @@ Una pregunta muy simple:
 
 - Entonces tenemos un escenario si un proveedor por ejemplo punto red nos entrega sus servicios y nos da credenciales de conexion y password, este consumo no deberia hacerse desde el front(angular), debe hacerse desde el back y exponer un servicio al front asi el le entrega solo lo que necesita al back y el back hace la peticion al proveedor.
 
-- Nunca debe guardar o enviar esas credenciales al front debe todo guadrase en un vault en el back
+- Nunca debe guardar o enviar esas credenciales al front debe todo guardarse en un vault en el back
 
 - Encriptar las llaves en angular y dejarlas ahi mismo aun sigue siendo inseguro, eso ofusca la informacion y al hace mas dificil entenderla pero no evita el problema. las llaves de encriptacion igual estaran en el front o tendran que llegar ahi para poder desencriptarla.
 
@@ -667,6 +667,205 @@ readonly error = computed(() => this.state().error);
 - text-gray-600 = texto gris
 - hover:underline = text-decoration: underline;
 
+## Ordend de desarrollo
+
+1️⃣ Layout
+↓
+2️⃣ Tamaños
+↓
+3️⃣ Espaciado
+↓
+4️⃣ Tipografía
+↓
+5️⃣ Colores
+↓
+6️⃣ Bordes y Sombras
+↓
+7️⃣ Estados
+↓
+8️⃣ Animaciones
+
+💡 ¿Por qué este orden?
+
+Porque imita cómo construyes una casa:
+
+🏗️ Primero haces la estructura (layout).
+📏 Luego decides el tamaño de las habitaciones.
+🚶 Después dejas espacio para moverte.
+🪑 Luego colocas los muebles (tipografía y contenido).
+🎨 Pintas las paredes (colores).
+✨ Añades los acabados (bordes y sombras).
+💡 Instalas interruptores y puertas (estados).
+🎭 Al final agregas detalles decorativos (animaciones).
+
+## Temario
+
+🟩 Módulo 1 – Introducción
+¿Qué es Tailwind CSS?
+Filosofía Utility First.
+Cómo leer una clase de Tailwind.
+Mobile First.
+
+🟩 Módulo 2 – Flexbox ⭐⭐⭐⭐⭐
+
+Aprendimos:
+
+flex
+flex-col
+flex-row
+justify-*
+items-*
+gap-*
+
+Al final ya podías construir formularios y centrar elementos.
+
+🟩 Módulo 3 – Espaciado ⭐⭐⭐⭐⭐
+
+Vimos:
+
+p-*
+px-*
+py-*
+m-*
+mx-*
+my-*
+gap-*
+
+Y una regla importante:
+
+Usar gap antes que margin cuando sea posible.
+
+🟩 Módulo 4 – Tamaños ⭐⭐⭐⭐⭐
+
+Aprendimos:
+
+w-full
+w-screen
+max-w-*
+h-full
+min-h-screen
+
+Y entendimos la diferencia entre tamaños relativos al padre y a la pantalla.
+
+🟩 Módulo 5 – Tipografía ⭐⭐⭐⭐
+
+Vimos:
+
+text-*
+font-bold
+font-semibold
+text-center
+text-left
+text-right
+🟩 Módulo 6 – Responsive ⭐⭐⭐⭐⭐
+
+Aprendimos:
+
+sm:
+md:
+lg:
+xl:
+
+Y la filosofía Mobile First.
+
+🟩 Módulo 7 – Colores ⭐⭐⭐⭐
+
+Vimos:
+
+bg-*
+text-*
+gray-*
+blue-*
+green-*
+Escalas (100 a 900).
+hover:bg-*
+🟩 Módulo 8 – Bordes y Sombras ⭐⭐⭐⭐
+
+Aprendimos:
+
+border
+border-2
+border-*
+rounded
+rounded-full
+shadow
+shadow-md
+shadow-lg
+🟩 Módulo 9 – Estados ⭐⭐⭐⭐⭐
+
+Vimos:
+
+hover:
+focus:
+active:
+disabled:
+
+Y entendimos que los estados modifican el comportamiento visual según la interacción del usuario.
+
+🟩 Módulo 10 – Grid ⭐⭐⭐⭐⭐
+
+Aprendimos:
+
+grid
+grid-cols-*
+gap-*
+
+Y cuándo usar Grid en lugar de Flexbox.
+
+🟩 Módulo 11 – Position ⭐⭐⭐⭐
+
+Vimos:
+
+relative
+absolute
+fixed
+sticky
+z-*
+top-*
+bottom-*
+left-*
+right-*
+🟩 Módulo 12 – Overflow ⭐⭐⭐
+
+Aprendimos:
+
+overflow-hidden
+overflow-auto
+overflow-y-auto
+overflow-x-auto
+
+🟩 Módulo 13 – Dark Mode ⭐⭐⭐⭐
+
+Vimos:
+
+dark:
+dark:bg-*
+dark:text-*
+
+Y cómo adaptar una interfaz a modo claro y oscuro.
+
+🟩 Módulo 14 – Animaciones ⭐⭐⭐
+
+Aprendimos:
+
+animate-spin
+animate-pulse
+animate-bounce
+transition
+duration-*
+
+Y cuándo tiene sentido usar animaciones.
+
+🟩 Módulo 15 – Buenas prácticas ⭐⭐⭐⭐⭐
+
+Aquí consolidamos varias ideas importantes:
+
+Pensar primero en el layout.
+Usar Flex o Grid según el problema.
+Preferir gap sobre margin para separar elementos.
+Aprovechar las clases predefinidas antes de usar valores arbitrarios ([...]).
+Seguir el flujo de desarrollo:
+
 ---
 
 # 15. Rxjs
@@ -707,7 +906,171 @@ observable.pipe(...).
 
 # 16. primeNg
 
-- p-card = Tarjeta con estilos prediseñados
+💡 Buenas prácticas extra
+
+- p-button:
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+label | Texto del botón | ⭐⭐⭐⭐⭐
+icon | Agregar iconos | ⭐⭐⭐⭐⭐
+loading | Mostrar carga | ⭐⭐⭐⭐⭐
+disabled | Deshabilitar | ⭐⭐⭐⭐⭐
+severity | Color según intención | ⭐⭐⭐⭐⭐
+fluid | Ancho completo | ⭐⭐⭐⭐⭐
+rounded | Bordes redondeados | ⭐⭐⭐⭐
+variant | Estilo (outlined, text...) | ⭐⭐⭐⭐
+size | Tamaño | ⭐⭐⭐
+raised | Elevación | ⭐⭐⭐
+
+💡 Buenas prácticas extra
+
+- pInputText:
+
+Propiedad / Atributo | ¿Para qué sirve? | ¿La usarás mucho?
+pInputText | Aplica el estilo y comportamiento de PrimeNG a un `<input>` HTML. | ⭐⭐⭐⭐⭐
+type | Define el tipo de dato (text, email, password, number, etc.). | ⭐⭐⭐⭐⭐
+formControlName | Vincula el input a un formulario reactivo de Angular. | ⭐⭐⭐⭐⭐
+placeholder | Muestra un texto de ayuda cuando el campo está vacío. | ⭐⭐⭐⭐⭐
+class="w-full" | Hace que el input ocupe todo el ancho disponible. | ⭐⭐⭐⭐⭐
+[disabled] | Deshabilita el campo de forma dinámica. | ⭐⭐⭐⭐
+readonly | Permite ver el contenido pero no modificarlo. | ⭐⭐⭐
+maxlength | Limita la cantidad máxima de caracteres permitidos. | ⭐⭐⭐
+autocomplete | Permite al navegador autocompletar información. | ⭐⭐⭐⭐
+id | Identifica el input y permite asociarlo con un `<label>`. | ⭐⭐⭐⭐
+
+- p-password:
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+formControlName | Vincula el componente al formulario reactivo. | ⭐⭐⭐⭐⭐
+placeholder | Texto de ayuda cuando el campo está vacío. | ⭐⭐⭐⭐⭐
+toggleMask | Permite mostrar u ocultar la contraseña. | ⭐⭐⭐⭐⭐
+feedback | Muestra u oculta el medidor de fortaleza. | ⭐⭐⭐⭐⭐
+fluid | Hace que ocupe todo el ancho disponible. | ⭐⭐⭐⭐⭐
+[disabled] | Deshabilita el componente dinámicamente. | ⭐⭐⭐⭐
+promptLabel | Personaliza el texto inicial del medidor. | ⭐⭐⭐
+weakLabel | Texto para contraseña débil. | ⭐⭐⭐
+mediumLabel | Texto para contraseña media. | ⭐⭐⭐
+strongLabel | Texto para contraseña fuerte. | ⭐⭐⭐
+
+- p-card:
+
+Componente para agrupar la informacion relacionada
+Dentro de esa caja puedes colocar:
+
+Títulos.
+Formularios.
+Botones.
+Imágenes.
+Tablas.
+Texto.
+
+Porque p-card ya incorpora un diseño consistente con el tema de PrimeNG.
+
+Además, deja clara tu intención.
+
+No es lo mismo leer
+
+```typescript
+<div>
+```
+
+que leer:
+
+```typescript
+<p-card>
+```
+
+Con p-card cualquier desarrollador entiende inmediatamente:
+"Aquí comienza una tarjeta."
+
+La estructura de p-card
+
+Normalmente una tarjeta tiene tres partes.
+
+┌─────────────────────┐
+│ Header │
+├─────────────────────┤
+│ │
+│ Content │
+│ │
+├─────────────────────┤
+│ Footer │
+└─────────────────────┘
+
+No siempre necesitas las tres.
+
+1. Header
+
+Es la parte superior.
+
+Generalmente contiene:
+
+Título.
+Imagen.
+Icono.
+
+Ejemplo:
+
+```typescript
+<ng-template #header>
+
+</ng-template>
+```
+
+2. Content
+
+Es el cuerpo.
+
+Aquí normalmente colocas:
+
+Formularios.
+Texto.
+Tablas.
+Componentes.
+
+Es la parte que más usarás.
+
+3. Footer
+
+Va al final.
+
+Muy usado para:
+
+Botones.
+Acciones.
+Enlaces.
+
+Ejemplo real
+```typescript
+<p-card>
+
+    <h2>Iniciar sesión</h2>
+
+    <input pInputText>
+
+    <p-password></p-password>
+
+    <p-button></p-button>
+
+</p-card>
+```
+
+- p-select:
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+options | Define las opciones que aparecerán en el select. | ⭐⭐⭐⭐⭐
+optionLabel | Define qué propiedad del objeto se muestra al usuario. | ⭐⭐⭐⭐⭐
+optionValue | Define qué propiedad del objeto se guardará como valor. | ⭐⭐⭐⭐⭐
+formControlName | Vincula el select con un formulario reactivo. | ⭐⭐⭐⭐⭐
+placeholder | Texto mostrado cuando todavía no se ha seleccionado una opción. | ⭐⭐⭐⭐⭐
+fluid | Hace que el select ocupe todo el ancho disponible. | ⭐⭐⭐⭐⭐
+disabled | Deshabilita el componente. | ⭐⭐⭐⭐
+showClear | Permite limpiar la selección realizada. | ⭐⭐⭐⭐
+filter (boolen)| Permite buscar dentro de las opciones. | ⭐⭐⭐⭐
+filterBy (propiedad a filtar) | Permite buscar dentro de las opciones. | ⭐⭐⭐⭐
+loading | Muestra que las opciones están cargando. | ⭐⭐⭐
+
+
 - pInputText = Aplica el estilo de PrimeNG a un <input>
 - p-password = Campo de contraseña con funcionalidades como mostrar/ocultar el texto y validaciones visuales
 - [toggleMask]="true" = Muestra el ícono para revelar u ocultar la contraseña
@@ -719,7 +1082,117 @@ observable.pipe(...).
 - p-datepicker = Selector de fecha.
 - p-select = Lista desplegable.
 - p-autocomplete = Autocompletado.
-- fluid = para dar ancho a inputs de ngprime ya que w-full no funciona por que no son inputs puros.
+- fluid = para dar ancho a inputs de ngprime ya que w-full no funciona por si solo por que no son inputs puros estan dentro de un host(p-button) por ejemplo el button html original puro esta oculto, solucion: usar las propiedades propias de primeNG, usar Usar PassThrough (pt), Usar CSS personalizado (Último recurso y menos recomendado ).
+
+# 16. Responsabilidades de diseno con esta arquitectura
+
+- Angular se enecarga de la logica de negocio
+- Tailwind organiza y distribuye la interfaz (layout, espaciado, responsive).
+- PrimeNG proporciona componentes ricos (tablas, diálogos, calendarios, botones...).
+- El tema define la identidad visual (colores, radios, tipografía).
+
+Angular → Lógica
+
+↓
+
+Tailwind → Layout
+
+↓
+
+PrimeNG → Componentes
+
+La filosofía profesional
+
+Cada herramienta tiene una responsabilidad.
+
+🟦 Tailwind
+
+Se encarga del layout.
+
+Es decir:
+
+- Flex
+- Grid
+- Responsive
+- Espaciados
+- Márgenes
+- Padding
+- Centrado
+- Distribución
+
+Ejemplo:
+
+```typescript
+<div class="flex justify-center items-center min-h-screen">
+```
+
+🟦PriemNG
+
+Se encarga del componente.
+
+Ejemplo:
+
+```typescript
+<p-button />
+
+<p-table />
+
+<p-password />
+
+<p-dialog />
+
+<p-datepicker />
+```
+
+PrimeNG ya implementó:
+
+Accesibilidad
+Eventos
+Estados
+Animaciones
+Navegación con teclado
+ARIA
+Comportamientos complejos
+
+No vale la pena reinventarlo.
+
+---
+
+# 17. Interceptor de logs
+
+Recomendable tener un interceptor de logs,bpreferiblemente que rastree el response y el request de cada peticion http
+y el correspondiente error
+
+---
+
+## REGLA DE ORO
+
+Cuando una clase de Tailwind no funciona sobre un componente de PrimeNG, NO empieces a pelear con Tailwind.
+Hazte estas tres preguntas, en este orden:
+
+🥇 Opción 1 (Siempre la primera)
+¿PrimeNG ya tiene una propiedad para hacerlo?
+No intentes resolver con Tailwind algo que PrimeNG ya resuelve.
+
+🥈 Opción 2
+¿Puedo usar PassThrough (pt)?
+Aquí Tailwind sí llega al elemento correcto.
+Esta es una técnica muy usada en proyectos profesionales.
+
+🥉 Opción 3
+CSS personalizado
+Solo cuando las dos anteriores no sean suficientes.
+Es el último recurso.
+
+Ejemplo:
+
+```typescript
+.my-button .p-button {
+    border-radius: 9999px;
+}
+```
+
+---
 
 # 📌 Resumen
 
