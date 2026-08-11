@@ -5,7 +5,6 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <!-- Email -->
       <div class="mb-4">
-        <p-select showClear="true" [filter]="true" filterBy="name" [options]="countries" optionLabel="name" optionValue="code"  fluid placeholder="Seleccione un país"/>
         <label for="email" class="block text-sm font-medium text-gray-700 mb-1"
           >Correo Electrónico</label
         >
@@ -17,13 +16,16 @@
           placeholder="admin@example.com"
           class="w-full"
         />
-        <div
-          *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-          class="text-sm text-red-500 mt-1"
-        >
-          <span *ngIf="loginForm.get('email')?.errors?.['required']">El correo es obligatorio</span>
-          <span *ngIf="loginForm.get('email')?.errors?.['email']">Ingrese un correo válido</span>
-        </div>
+        @if (email?.invalid && email?.touched) {
+          <div class="text-sm text-red-500 mt-1">
+            @if (email?.errors?.['required']) {
+              <span>El correo es obligatorio</span>
+            }
+            @if (email?.errors?.['email']) {
+              <span>Ingrese un correo válido</span>
+            }
+          </div>
+        }
       </div>
 
       <!-- Contraseña -->
@@ -36,18 +38,19 @@
           formControlName="password"
           toggleMask="true"
           feedback="true"
-          placeholder="Ingrese su contraseñad"
+          placeholder="Ingrese su contraseña"
           fluid
         />
-        <div
-          *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-          class="text-sm text-red-500 mt-1"
-        >
-          <span *ngIf="loginForm.get('password')?.errors?.['required']"
-            >La contraseña es obligatoria</span
-          >
-          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres</span>
-        </div>
+        @if (password?.invalid && password?.touched) {
+          <div class="text-sm text-red-500 mt-1">
+            @if (password?.errors?.['required']) {
+              <span>La contraseña es obligatoria</span>
+            }
+            @if (password?.errors?.['minlength']) {
+              <span>Mínimo 6 caracteres</span>
+            }
+          </div>
+        }
       </div>
 
       <!-- Botón de envío -->
@@ -62,11 +65,6 @@
           class="w-full"
           fluid
         />
-      </div>
-
-      <!-- Mensaje de error del store -->
-      <div *ngIf="authStore.error()" class="mt-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
-        {{ authStore.error() }}
       </div>
 
       <!-- Enlace a registro -->

@@ -1,5 +1,11 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  FormControl,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthStore } from '../../../../core/auth/auth.store';
 import { ButtonModule } from 'primeng/button';
@@ -8,7 +14,11 @@ import { PasswordModule } from 'primeng/password';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { InputPasswordModule } from 'primeng/inputpassword';
-import { SelectModule } from 'primeng/select';
+
+interface LoginForm {
+  email: FormControl<string>;
+  password: FormControl<string>;
+}
 
 @Component({
   selector: 'app-login-page',
@@ -21,34 +31,33 @@ import { SelectModule } from 'primeng/select';
     PasswordModule,
     CardModule,
     InputPasswordModule,
-    SelectModule
   ],
   templateUrl: './login.page.html',
   styleUrl: './login.page.scss',
 })
 export class LoginPage {
-  loginForm: FormGroup;
+  private readonly fb = inject(FormBuilder);
+  protected readonly authStore = inject(AuthStore);
 
-  countries = [
-  { name: 'Colombia', code: 'CO' },
-  { name: 'México', code: 'MX' },
-  { name: 'Argentina', code: 'AR' }
-];
+  loginForm: FormGroup<LoginForm> = this.fb.nonNullable.group({
+    email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
+    password: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(6)]),
+  });
 
-  constructor(
-    private fb: FormBuilder,
-    public authStore: AuthStore,
-    private router: Router,
-  ) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
+  protected get email() {
+     return this.loginForm.controls.email;
+  }
+
+  protected get password() {
+    return this.loginForm.controls.password;
   }
 
   onSubmit(): void {
-    if (this.loginForm.invalid) return;
-    const credentials = this.loginForm.value;
+    this.loginForm.markAllAsTouched();
+    if (this.loginForm.invalid) {
+      return;
+    }
+    const credentials = this.loginForm.getRawValue();
     this.authStore.login(credentials);
   }
 }
