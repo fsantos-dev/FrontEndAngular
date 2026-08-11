@@ -14,11 +14,8 @@ import { PasswordModule } from 'primeng/password';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { InputPasswordModule } from 'primeng/inputpassword';
+import { LoginForm } from '../../models/auth-model';
 
-interface LoginForm {
-  email: FormControl<string>;
-  password: FormControl<string>;
-}
 
 @Component({
   selector: 'app-login-page',
@@ -40,8 +37,8 @@ export class LoginPage {
   protected readonly authStore = inject(AuthStore);
 
   loginForm: FormGroup<LoginForm> = this.fb.nonNullable.group({
-    email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
-    password: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(6)]),
+    email: this.fb.nonNullable.control('', [Validators.required, Validators.email, Validators.maxLength(150)]),
+    password: this.fb.nonNullable.control('', [Validators.required, Validators.maxLength(200)]),
   });
 
   protected get email() {
