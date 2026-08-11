@@ -710,12 +710,12 @@ Mobile First.
 
 Aprendimos:
 
-flex
-flex-col
-flex-row
-justify-*
-items-*
-gap-*
+- flex
+- flex-col
+- flex-row
+- justify-*
+- items-*
+- gap-*
 
 Al final ya podías construir formularios y centrar elementos.
 
@@ -723,13 +723,13 @@ Al final ya podías construir formularios y centrar elementos.
 
 Vimos:
 
-p-*
-px-*
-py-*
-m-*
-mx-*
-my-*
-gap-*
+- p-*
+- px-*
+- py-*
+- m-*
+- mx-*
+- my-*
+- gap-*
 
 Y una regla importante:
 
@@ -739,11 +739,11 @@ Usar gap antes que margin cuando sea posible.
 
 Aprendimos:
 
-w-full
-w-screen
-max-w-*
-h-full
-min-h-screen
+- w-full
+- w-screen
+- max-w-*
+- h-full
+- min-h-screen
 
 Y entendimos la diferencia entre tamaños relativos al padre y a la pantalla.
 
@@ -751,20 +751,20 @@ Y entendimos la diferencia entre tamaños relativos al padre y a la pantalla.
 
 Vimos:
 
-text-*
-font-bold
-font-semibold
-text-center
-text-left
-text-right
+- text-*
+- font-bold
+- font-semibold
+- text-center
+- text-left
+- text-right
 🟩 Módulo 6 – Responsive ⭐⭐⭐⭐⭐
 
 Aprendimos:
 
-sm:
-md:
-lg:
-xl:
+- sm:
+- md:
+- lg:
+- xl:
 
 Y la filosofía Mobile First.
 
@@ -772,33 +772,34 @@ Y la filosofía Mobile First.
 
 Vimos:
 
-bg-*
-text-*
-gray-*
-blue-*
-green-*
-Escalas (100 a 900).
-hover:bg-*
+- bg-*
+- text-*
+- gray-*
+- blue-*
+- green-*
+- Escalas (100 a 900).
+- hover:bg-*
+
 🟩 Módulo 8 – Bordes y Sombras ⭐⭐⭐⭐
 
 Aprendimos:
 
-border
-border-2
-border-*
-rounded
-rounded-full
-shadow
-shadow-md
-shadow-lg
+- border
+- border-2
+- border-*
+- rounded
+- rounded-full
+- shadow
+- shadow-md
+- shadow-lg
 🟩 Módulo 9 – Estados ⭐⭐⭐⭐⭐
 
 Vimos:
 
-hover:
-focus:
-active:
-disabled:
+- hover:
+- focus:
+- active:
+- disabled:
 
 Y entendimos que los estados modifican el comportamiento visual según la interacción del usuario.
 
@@ -806,9 +807,9 @@ Y entendimos que los estados modifican el comportamiento visual según la intera
 
 Aprendimos:
 
-grid
-grid-cols-*
-gap-*
+- grid
+- grid-cols-*
+- gap-*
 
 Y cuándo usar Grid en lugar de Flexbox.
 
@@ -816,31 +817,31 @@ Y cuándo usar Grid en lugar de Flexbox.
 
 Vimos:
 
-relative
-absolute
-fixed
-sticky
-z-*
-top-*
-bottom-*
-left-*
-right-*
+- relative
+- absolute
+- fixed
+- sticky
+- z-*
+- top-*
+- bottom-*
+- left-*
+- right-*
 🟩 Módulo 12 – Overflow ⭐⭐⭐
 
 Aprendimos:
 
-overflow-hidden
-overflow-auto
-overflow-y-auto
-overflow-x-auto
+- overflow-hidden
+- overflow-auto
+- overflow-y-auto
+- overflow-x-auto
 
 🟩 Módulo 13 – Dark Mode ⭐⭐⭐⭐
 
 Vimos:
 
-dark:
-dark:bg-*
-dark:text-*
+- dark:
+- dark:bg-*
+- dark:text-*
 
 Y cómo adaptar una interfaz a modo claro y oscuro.
 
@@ -848,11 +849,11 @@ Y cómo adaptar una interfaz a modo claro y oscuro.
 
 Aprendimos:
 
-animate-spin
-animate-pulse
-animate-bounce
-transition
-duration-*
+- animate-spin
+- animate-pulse
+- animate-bounce
+- transition
+- duration-*
 
 Y cuándo tiene sentido usar animaciones.
 
@@ -860,11 +861,11 @@ Y cuándo tiene sentido usar animaciones.
 
 Aquí consolidamos varias ideas importantes:
 
-Pensar primero en el layout.
-Usar Flex o Grid según el problema.
-Preferir gap sobre margin para separar elementos.
-Aprovechar las clases predefinidas antes de usar valores arbitrarios ([...]).
-Seguir el flujo de desarrollo:
+- Pensar primero en el layout.
+- Usar Flex o Grid según el problema.
+- Preferir gap sobre margin para separar elementos.
+- Aprovechar las clases predefinidas antes de usar valores arbitrarios ([...]).
+- Seguir el flujo de desarrollo:
 
 ---
 
