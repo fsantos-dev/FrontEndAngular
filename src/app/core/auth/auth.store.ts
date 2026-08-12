@@ -7,12 +7,14 @@ import { finalize } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MessageService } from 'primeng/api';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
   private readonly router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private readonly authService = inject(AuthService);
+  private readonly messageService = inject(MessageService);
 
   private readonly tokenService = inject(TokenService);
   private readonly userService = inject(UserService);
@@ -52,10 +54,10 @@ export class AuthStore {
       .subscribe({
         next: (response) => {
           this.saveSession(response);
-          this.router.navigate(['/categorias']);
+          this.router.navigate(['/categories']);
         },
         error: (err: HttpErrorResponse) => {
-          this.errorSignal.set(this.extractError(err, 'Error al iniciar sesión'));
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: this.extractError(err, 'Error al iniciar sesión') });
         },
       });
   }
@@ -73,14 +75,17 @@ export class AuthStore {
       .subscribe({
         next: (response) => {
           this.saveSession(response);
+          this.router.navigate(['/categorias']);
         },
         error: (err: HttpErrorResponse) => {
-          this.errorSignal.set(this.extractError(err, 'Error al registrarse'));
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: this.extractError(err, 'Error al iniciar sesión') });
         },
       });
   }
 
   logout(): void {
+    console.log('pasamos por logout')
+    this.userService.clear();
     this.tokenService.clear();
     this.router.navigate(['/auth/login']);
   }

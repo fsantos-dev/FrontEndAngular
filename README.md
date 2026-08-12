@@ -757,7 +757,7 @@ Vimos:
 - text-center
 - text-left
 - text-right
-🟩 Módulo 6 – Responsive ⭐⭐⭐⭐⭐
+  🟩 Módulo 6 – Responsive ⭐⭐⭐⭐⭐
 
 Aprendimos:
 
@@ -792,7 +792,7 @@ Aprendimos:
 - shadow
 - shadow-md
 - shadow-lg
-🟩 Módulo 9 – Estados ⭐⭐⭐⭐⭐
+  🟩 Módulo 9 – Estados ⭐⭐⭐⭐⭐
 
 Vimos:
 
@@ -826,7 +826,7 @@ Vimos:
 - bottom-*
 - left-*
 - right-*
-🟩 Módulo 12 – Overflow ⭐⭐⭐
+  🟩 Módulo 12 – Overflow ⭐⭐⭐
 
 Aprendimos:
 
@@ -1042,6 +1042,7 @@ Acciones.
 Enlaces.
 
 Ejemplo real
+
 ```typescript
 <p-card>
 
@@ -1068,20 +1069,283 @@ fluid | Hace que el select ocupe todo el ancho disponible. | ⭐⭐⭐⭐⭐
 disabled | Deshabilita el componente. | ⭐⭐⭐⭐
 showClear | Permite limpiar la selección realizada. | ⭐⭐⭐⭐
 filter (boolen)| Permite buscar dentro de las opciones. | ⭐⭐⭐⭐
-filterBy (propiedad a filtar) | Permite buscar dentro de las opciones. | ⭐⭐⭐⭐
+filterBy (propiedad a filtar) | Permite buscar dentro de las opciones. (optionLabel)| ⭐⭐⭐⭐
 loading | Muestra que las opciones están cargando. | ⭐⭐⭐
 
+- p-table:
+  ¿Para qué se usa?
+  Para mostrar y administrar grandes cantidades de datos en forma de tabla. Permite paginación, ordenamiento, filtros, selección y carga de datos.
 
-- pInputText = Aplica el estilo de PrimeNG a un <input>
-- p-password = Campo de contraseña con funcionalidades como mostrar/ocultar el texto y validaciones visuales
-- [toggleMask]="true" = Muestra el ícono para revelar u ocultar la contraseña
-- p-button = Botón con estilos y estados (loading, disabled, etc.)
-- p-password = Contraseñas.
-- p-inputnumber = Números.
-- p-inputmask = Campos con máscara (teléfono, documento, etc.).
-- p-textarea = Área de texto.
-- p-datepicker = Selector de fecha.
-- p-select = Lista desplegable.
+Aqui hay que tener cuidado en poner una clase en un th,td,tr por ejemplo primeNG sobreescribe las clases de tailwind
+si queremos aplicar una deber ser !text-center por ejemplo y no text-center.
+
+```typescript
+<p-table [value]="users">
+  <ng-template #header>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-user>
+    <tr>
+      <td>{{ user.id }}</td>
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+      <td>
+        <p-button icon="pi pi-pencil" severity="info" />
+
+        <p-button icon="pi pi-trash" severity="danger" />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+```
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+[value] | Define los datos que mostrará la tabla. | ⭐⭐⭐⭐⭐
+#header | Define el encabezado de la tabla. | ⭐⭐⭐⭐⭐
+#body | Define cómo se representa cada fila. | ⭐⭐⭐⭐⭐
+let-row | Obtiene el elemento actual de la colección. | ⭐⭐⭐⭐⭐
+paginator | Activa la paginación. | ⭐⭐⭐⭐⭐
+rows | Define cuántas filas se muestran por página. | ⭐⭐⭐⭐⭐
+rowsPerPageOptions | Define las cantidades de filas disponibles por página. | ⭐⭐⭐⭐
+pSortableColumn | Hace que una columna pueda ordenarse. | ⭐⭐⭐⭐⭐
+p-sortIcon | Muestra el ícono del estado de ordenamiento. | ⭐⭐⭐⭐⭐
+sortField | Define el campo utilizado para ordenar. | ⭐⭐⭐⭐
+p-columnFilter | Agrega un filtro a una columna. | ⭐⭐⭐⭐⭐
+filterField | Define el campo sobre el que se aplicará el filtro. | ⭐⭐⭐⭐⭐
+matchMode | Define cómo se comparará el valor del filtro. | ⭐⭐⭐⭐
+selection | Define el elemento o elementos seleccionados. | ⭐⭐⭐⭐⭐
+selectionMode | Define si la selección es simple o múltiple. | ⭐⭐⭐⭐⭐
+p-tableCheckbox | Permite seleccionar una fila mediante checkbox. | ⭐⭐⭐⭐
+p-tableHeaderCheckbox | Permite seleccionar todas las filas. | ⭐⭐⭐⭐
+[loading] | Muestra el estado de carga de la tabla. | ⭐⭐⭐⭐⭐
+lazy | Permite cargar los datos bajo demanda desde el backend. | ⭐⭐⭐⭐⭐
+onLazyLoad | Detecta cambios de página, filtros u ordenamiento para consultar al backend. | ⭐⭐⭐⭐⭐
+totalRecords | Indica la cantidad total de registros existentes en el backend. | ⭐⭐⭐⭐⭐
+first | Define el índice del primer registro mostrado. | ⭐⭐⭐⭐
+
+La diferencia es quién hace el trabajo:
+
+🟢 Frontend: Angular recibe todo → PrimeNG filtra/ordena/pagina.
+🔵 Backend: Angular pide solamente lo necesario → API filtra/ordena/pagina → PrimeNG muestra el resultado.
+
+```typescript
+<p-table
+  [value]="users"
+  [lazy]="true"
+  [paginator]="true"
+  [rows]="10"
+  [totalRecords]="totalRecords"
+  (onLazyLoad)="loadUsers($event)"
+>
+
+loadUsers(event: TableLazyLoadEvent) {
+  const page = event.first! / event.rows!;
+
+  this.userService.getUsers(page, event.rows!).subscribe(response => {
+    this.users = response.data;
+    this.totalRecords = response.totalRecords;
+  });
+}
+```
+
+- p-dialog
+
+¿Para qué se usa?
+Para mostrar una ventana modal sobre la página actual. Es muy utilizado para formularios de crear, editar o visualizar información.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+header | Define el título del diálogo. | ⭐⭐⭐⭐⭐
+[(visible)] | Controla si el diálogo está visible. | ⭐⭐⭐⭐⭐
+modal | Bloquea la interacción con el contenido exterior. | ⭐⭐⭐⭐⭐
+closable | Permite mostrar u ocultar el botón de cerrar. | ⭐⭐⭐⭐
+dismissableMask | Permite cerrar haciendo clic fuera del diálogo. | ⭐⭐⭐⭐
+draggable | Permite mover el diálogo. | ⭐⭐⭐
+resizable | Permite cambiar el tamaño del diálogo. | ⭐⭐⭐
+styleClass | Permite aplicar una clase CSS personalizada. | ⭐⭐⭐⭐
+
+- p-drawer
+¿Para qué se usa?
+Para mostrar un panel lateral sobre la página actual. Es muy utilizado para crear sidebars, menús de navegación y paneles laterales responsive.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+[(visible)] | Controla si el drawer está visible. | ⭐⭐⭐⭐⭐
+position | Define desde qué lado aparece el drawer. | ⭐⭐⭐⭐⭐
+header | Define el contenido o título del drawer. | ⭐⭐⭐⭐
+modal | Bloquea la interacción con el contenido exterior. | ⭐⭐⭐⭐⭐
+dismissible | Permite cerrar haciendo clic fuera del drawer. | ⭐⭐⭐⭐⭐
+showCloseIcon | Permite mostrar u ocultar el botón de cerrar. | ⭐⭐⭐⭐
+styleClass | Permite aplicar una clase CSS personalizada. | ⭐⭐⭐⭐
+blockScroll | Evita el scroll de la página mientras el drawer está abierto. | ⭐⭐⭐⭐
+
+- p-confirmdialog
+
+¿Para qué se usa?
+Para pedir confirmación antes de ejecutar acciones importantes, como eliminar registros.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+message | Define el mensaje de confirmación. | ⭐⭐⭐⭐⭐
+header | Define el título del diálogo. | ⭐⭐⭐⭐⭐
+acceptLabel | Define el texto del botón de aceptar. | ⭐⭐⭐⭐
+rejectLabel | Define el texto del botón de cancelar. | ⭐⭐⭐⭐
+accept | Define la acción cuando el usuario acepta. | ⭐⭐⭐⭐⭐
+reject | Define la acción cuando el usuario rechaza. | ⭐⭐⭐⭐⭐
+
+- p-toast
+  ¿Para qué se usa?
+  Para mostrar notificaciones temporales al usuario, por ejemplo cuando una operación fue exitosa o ocurrió un error.
+
+este deberia ser global uno por aplicacion raiz en el app.html y se llama en cualquier lado con un messageService que debe importarse  en el app.config.ts
+
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+severity | Define el tipo de mensaje: success, info, warn o error. | ⭐⭐⭐⭐⭐
+summary | Define el título breve de la notificación. | ⭐⭐⭐⭐⭐
+detail | Define la descripción del mensaje. | ⭐⭐⭐⭐⭐
+life | Define cuánto tiempo permanece visible. | ⭐⭐⭐⭐
+
+- p-message
+
+¿Para qué se usa?
+Para mostrar mensajes directamente dentro de la interfaz, especialmente mensajes de validación, información o errores.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+severity | Define el tipo de mensaje. | ⭐⭐⭐⭐⭐
+text | Define el contenido del mensaje. | ⭐⭐⭐⭐⭐
+icon | Agrega un ícono al mensaje. | ⭐⭐⭐⭐
+closable | Permite cerrar el mensaje. | ⭐⭐⭐
+
+- p-checkbox
+  ¿Para qué se usa?
+  Para permitir que el usuario seleccione o deseleccione una opción mediante una casilla.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+formControlName | Vincula el checkbox con Reactive Forms. | ⭐⭐⭐⭐⭐
+binary | Hace que el valor sea booleano true/false. | ⭐⭐⭐⭐⭐
+disabled | Deshabilita el checkbox. | ⭐⭐⭐⭐
+label | Define el texto asociado al checkbox. | ⭐⭐⭐⭐
+inputId | Permite asociarlo con un <label>. | ⭐⭐⭐⭐
+
+- p-radiobutton
+  ¿Para qué se usa?
+  Para permitir seleccionar una sola opción entre varias alternativas.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+name | Agrupa los radio buttons para permitir una sola selección. | ⭐⭐⭐⭐⭐
+value | Define el valor de la opción. | ⭐⭐⭐⭐⭐
+formControlName | Vincula el radio button con Reactive Forms. | ⭐⭐⭐⭐⭐
+disabled | Deshabilita la opción. | ⭐⭐⭐⭐
+inputId | Permite asociarlo con un <label>. | ⭐⭐⭐⭐
+
+- p-datepicker
+  ¿Para qué se usa?
+  Para permitir al usuario seleccionar fechas mediante un calendario.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+formControlName | Vincula la fecha con Reactive Forms. | ⭐⭐⭐⭐⭐
+placeholder | Muestra un texto cuando no hay fecha seleccionada. | ⭐⭐⭐⭐⭐
+showIcon | Muestra el ícono del calendario. | ⭐⭐⭐⭐⭐
+dateFormat | Define el formato en que se muestra la fecha. | ⭐⭐⭐⭐⭐
+minDate | Define la fecha mínima permitida. | ⭐⭐⭐⭐
+maxDate | Define la fecha máxima permitida. | ⭐⭐⭐⭐
+showButtonBar | Muestra botones para limpiar o seleccionar la fecha actual. | ⭐⭐⭐
+
+- p-inputnumber
+
+¿Para qué se usa?
+Para introducir valores numéricos, cantidades, precios y monedas.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+formControlName | Vincula el número con Reactive Forms. | ⭐⭐⭐⭐⭐
+min | Define el valor mínimo permitido. | ⭐⭐⭐⭐⭐
+max | Define el valor máximo permitido. | ⭐⭐⭐⭐⭐
+mode | Define si trabaja como número decimal o moneda. | ⭐⭐⭐⭐⭐
+currency | Define la moneda cuando se utiliza mode="currency". | ⭐⭐⭐⭐⭐
+minFractionDigits | Define la cantidad mínima de decimales. | ⭐⭐⭐⭐
+maxFractionDigits | Define la cantidad máxima de decimales. | ⭐⭐⭐⭐
+locale | Define el formato regional del número. | ⭐⭐⭐⭐
+
+- p-multiselect
+  ¿Para qué se usa?
+  Para permitir seleccionar varias opciones de una lista.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+options | Define las opciones disponibles. | ⭐⭐⭐⭐⭐
+optionLabel | Define qué propiedad del objeto se muestra. | ⭐⭐⭐⭐⭐
+optionValue | Define qué propiedad se guarda. | ⭐⭐⭐⭐⭐
+formControlName | Vincula el componente con Reactive Forms. | ⭐⭐⭐⭐⭐
+placeholder | Texto mostrado cuando no hay selección. | ⭐⭐⭐⭐⭐
+filter | Permite buscar entre las opciones. | ⭐⭐⭐⭐⭐
+showClear | Permite limpiar la selección. | ⭐⭐⭐⭐
+maxSelectedLabels | Define cuántas opciones seleccionadas se muestran como texto. | ⭐⭐⭐
+
+- p-toolbar
+  ¿Para qué se usa?
+  Para crear una barra de acciones, normalmente con botones, búsquedas o controles relacionados con una sección.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+start | Contenido que aparece al inicio de la barra. | ⭐⭐⭐⭐⭐
+center | Contenido que aparece en el centro. | ⭐⭐⭐
+end | Contenido que aparece al final de la barra. | ⭐⭐⭐⭐⭐
+
+- p-sidebar
+
+¿Para qué se usa?
+Para crear paneles laterales, normalmente utilizados como menú de navegación o panel de opciones.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+[(visible)] | Controla si el sidebar está abierto. | ⭐⭐⭐⭐⭐
+position | Define dónde aparece el sidebar. | ⭐⭐⭐⭐⭐
+modal | Bloquea la interacción con el contenido exterior. | ⭐⭐⭐⭐
+dismissible | Permite cerrarlo haciendo clic fuera. | ⭐⭐⭐⭐
+showCloseIcon | Muestra el botón para cerrar. | ⭐⭐⭐⭐
+
+- p-menu
+  ¿Para qué se usa?
+  Para crear un menú de opciones que el usuario puede seleccionar.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+[model] | Define las opciones del menú. | ⭐⭐⭐⭐⭐
+label | Define el texto de una opción. | ⭐⭐⭐⭐⭐
+icon | Define el ícono de una opción. | ⭐⭐⭐⭐
+routerLink | Permite navegar a una ruta de Angular. | ⭐⭐⭐⭐⭐
+items | Define las opciones hijas de un elemento. | ⭐⭐⭐⭐
+
+- p-menubar
+  ¿Para qué se usa?
+  Para crear una barra de navegación, normalmente ubicada en la parte superior de una aplicación.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+[model] | Define las opciones de navegación. | ⭐⭐⭐⭐⭐
+label | Define el texto de una opción. | ⭐⭐⭐⭐⭐
+icon | Define el ícono de una opción. | ⭐⭐⭐⭐
+routerLink | Permite navegar mediante Angular Router. | ⭐⭐⭐⭐⭐
+items | Define submenús. | ⭐⭐⭐⭐
+
+- p-panel
+  ¿Para qué se usa?
+  Para agrupar contenido relacionado dentro de una sección visual organizada.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+header | Define el título del panel. | ⭐⭐⭐⭐
+toggleable | Permite expandir y contraer el panel. | ⭐⭐⭐⭐
+collapsed | Define si comienza contraído. | ⭐⭐⭐
+icon | Define un ícono asociado al panel. | ⭐⭐⭐
+
+- p-chart
+  ¿Para qué se usa?
+  Para representar información mediante gráficos, como barras, líneas, tortas o estadísticas de un dashboard.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+type | Define el tipo de gráfico. | ⭐⭐⭐⭐⭐
+[data] | Define los datos que mostrará el gráfico. | ⭐⭐⭐⭐⭐
+[options] | Define la configuración visual y funcional del gráfico. | ⭐⭐⭐⭐
+style | Permite definir dimensiones y estilos del gráfico. | ⭐⭐⭐⭐
+
 - p-autocomplete = Autocompletado.
 - fluid = para dar ancho a inputs de ngprime ya que w-full no funciona por si solo por que no son inputs puros estan dentro de un host(p-button) por ejemplo el button html original puro esta oculto, solucion: usar las propiedades propias de primeNG, usar Usar PassThrough (pt), Usar CSS personalizado (Último recurso y menos recomendado ).
 
@@ -1192,6 +1456,53 @@ Ejemplo:
     border-radius: 9999px;
 }
 ```
+
+---
+
+# 17. Centralizacion
+
+Siempre preguntarnos cambiar algo en el codigo implica hacer varios cambios repetidos de variables o estructura si es asi lo mejor es siemopre centralizar la informacion con eso solos e cambia en un lugar
+
+por ejemplo aqui se repite mucho loginForm.get('email') si se cambia el nombre de la variable toca cambiarla en varias partes
+
+```typescript
+@if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+  <div class="text-sm text-red-500 mt-1">
+    @if (loginForm.get('email')?.errors?.['required']) {
+      <span>El correo es obligatorio</span>
+    }
+    @if (loginForm.get('email')?.errors?.['email']) {
+      <span>Ingrese un correo válido</span>
+    }
+  </div>
+}
+```
+
+Solucion
+
+```typescript
+ protected get email() {
+     return this.loginForm.controls.email;
+  }
+
+  @if (email.invalid && email.touched) {
+  <div class="text-sm text-red-500 mt-1">
+    @if (email.errors?.['required']) { <span>El correo es obligatorio</span> }
+    @if (email.errors?.['email']) { <span>Ingrese un correo válido</span> }
+  </div>
+}
+```
+
+---
+
+# 18. INACTIVIDAD
+El tiempo de inactividad no debe ser igual o mayor al tiempo de expiracion del token por que si no nunca se ejecutara si el interceptor me saca siempre por expiracion de token 
+
+---
+
+# 19. PRIORIDAD Y ORDEN DE ESTILOS
+Si tenemos un padre como un layout que debe distribuir el tamano de sus componentes lo idea es que en el apdre se apliquen 
+los estilos de layout/distribucion y en los hijos demas estilos internos de diseno
 
 ---
 

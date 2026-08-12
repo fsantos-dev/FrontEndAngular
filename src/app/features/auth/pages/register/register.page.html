@@ -1,0 +1,107 @@
+<div class="flex justify-center items-center bg-gray-100 min-h-screen">
+  <p-card class="w-96 shadow-lg">
+    <div class="text-center text-2xl font-bold mb-6">Registrarse</div>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
+        <input
+          id="fullName"
+          type="text"
+          pInputText
+          placeholder="Nombre completo"
+          formControlName="fullName"
+          class="w-full"
+        />
+        @if (fullName?.invalid && fullName?.touched) {
+          <div class="text-sm text-red-500 mt-1">
+            @if (fullName?.errors?.['maxlength']) {
+              <span>El nombre no puede superar los 100 caracteres</span>
+            }
+          </div>
+        }
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
+        <input
+          id="email"
+          type="email"
+          pInputText
+          placeholder="admin@example.com"
+          formControlName="email"
+          class="w-full"
+        />
+        @if (email?.invalid && email?.touched) {
+          <div class="text-sm text-red-500 mt-1">
+            @if (email?.errors?.['required']) {
+              <span>El correo es obligatorio</span>
+            }
+            @else if (email?.errors?.['email']) {
+              <span>El formato del email no es valido</span>
+            }
+            @else if (email?.errors?.['maxlength']) {
+              <span>El nombre no puede superar los 150 caracteres</span>
+            }
+          </div>
+        }
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Contrasena</label>
+        <p-password
+          id="password"
+          formControlName="password"
+          fluid
+          placeholder="Ingrese su contrasena"
+          toggleMask
+        />
+        @if (password?.invalid && password?.touched) {
+          <div class="text-sm text-red-500 mt-1">
+            @if (password?.errors?.['required']) {
+              <span>La contrasena es obligatoria.</span>
+            }
+            @else if (password?.errors?.['minlength']) {
+              <span>La contrasena debe tener almenos 8 caracteres</span>
+            }
+            @else if (password?.errors?.['maxlength']) {
+              <span>La contrasena no debe superar los 50 caracteres</span>
+            }
+          </div>
+        }
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Repite la contrasena</label>
+        <p-password
+          id="repeatPassword"
+          formControlName="repeatPassword"
+          fluid
+          placeholder="Repite la contrasena"
+          toggleMask
+        />
+        @if (repeatPassword?.invalid && repeatPassword?.touched) {
+          <div class="text-sm text-red-500 mt-1">
+            @if (repeatPassword?.errors?.['required']) {
+              <span>La contrasena es obligatoria.</span>
+            }
+            @else if (repeatPassword?.errors?.['minlength']) {
+              <span>La contrasena debe tener almenos 8 caracteres</span>
+            }
+            @else if (repeatPassword?.errors?.['maxlength']) {
+              <span>La contrasena no debe superar los 50 caracteres</span>
+            }
+            @else if (repeatPassword?.errors?.['passwordMismatch']) {
+              <span>Las contraseñas no coinciden</span>
+            }
+          </div>
+        }
+      </div>
+      <p-button
+        type="submit"
+        label="Registrarse"
+        icon="pi pi-user"
+        iconPos="right"
+        fluid
+        [loading]="authStore.loading()"
+        [disabled]="registerForm.invalid"
+      />
+    </form>
+  </p-card>
+</div>
