@@ -1,7 +1,22 @@
-<div class="bg-[#101D3A] h-full p-4">
-    <div class="flex justify-between items-center text-white">
-        <label class="text-1xl font-bold">Categories APP</label>
-        <p-button icon="pi pi-times" severity="secondary" variant="text" (click)="isOpen.emit()"></p-button>
-    </div>
-    <p-menu [model]="menuOptions"></p-menu>
+<div class="bg-[#101D3A] h-full p-4 relative">
+  <div class="flex justify-between items-center text-white mb-4">
+    <label class="text-1xl font-bold">Categories APP</label>
+    <p-button
+      icon="pi pi-times"
+      severity="secondary"
+      variant="text"
+      (click)="isOpen.emit()"
+    ></p-button>
+  </div>
+  <ul class="text-white">
+    @for (item of menuOptions; track item.id) {
+      <li class="flex items-center gap-2 p-2 cursor-pointer rounded-lg mb-2" routerLinkActive="bg-[#477FF8]">
+        <i [class]="item.icon + ' !text-1xl'" ></i
+        ><a class="cursor-pointer" [routerLink]="item.route" >{{ item.label }}</a>
+      </li>
+    }
+  </ul>
+  <div class="absolute bottom-5 inset-x-0 flex justify-center">
+    <label class="text-white text-sm">Version {{version}}</label>
+  </div>
 </div>
