@@ -1,0 +1,20 @@
+<div class="h-dvh flex flex-col">
+  <div class="h-[10dvh]">
+    <app-header-layout (isOpen)="toggleSidebar()" />
+  </div>
+
+  <div class="flex h-[90dvh]">
+    <aside
+      class="shrink-0 overflow-hidden transition-[width] duration-300 ease-in-out"
+      [class.w-64]="isSidebarOpen()"
+      [class.w-0]="!isSidebarOpen()"
+    >
+      <app-sidebar-layout (isOpen)="toggleSidebar()" />
+    </aside>
+
+    <main>
+      <!-- <router-outlet /> -->
+      content
+    </main>
+  </div>
+</div>

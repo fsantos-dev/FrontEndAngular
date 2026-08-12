@@ -54,7 +54,7 @@ export class AuthStore {
       .subscribe({
         next: (response) => {
           this.saveSession(response);
-          this.router.navigate(['/categorias']);
+          this.router.navigate(['/categories']);
         },
         error: (err: HttpErrorResponse) => {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: this.extractError(err, 'Error al iniciar sesión') });
@@ -84,6 +84,8 @@ export class AuthStore {
   }
 
   logout(): void {
+    console.log('pasamos por logout')
+    this.userService.clear();
     this.tokenService.clear();
     this.router.navigate(['/auth/login']);
   }

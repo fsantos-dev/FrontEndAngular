@@ -1,0 +1,24 @@
+<div class="w-full bg-white flex gap-4 justify-between items-center p-4 h-full shadow-lg">
+  <div class="flex items-center gap-4">
+    <p-button
+      severity="secondary"
+      variant="text"
+      icon="pi pi-bars"
+      (click)="isOpen.emit()"
+    ></p-button>
+    <div class="flex items-center justify-center gap-2">
+      <div class="relative">
+        <img alt="Avatar usuario" src="/assets/dashboard/profile.png" class="w-11 h-11 object-cover"/>
+        <div class="absolute bg-green-500 w-2 h-2 rounded-full right-0 bottom-[5px] border border-white border-1"></div>
+      </div>
+      <label class="text-black text-1xl"><strong>Bienvenido,</strong> <br />{{ userName }}</label>
+    </div>
+  </div>
+  <p-button
+    severity="danger"
+    variant="text"
+    icon="pi pi-sign-out"
+    (click)="authStore.logout()"
+    label="Cerrar Sesión"
+  ></p-button>
+</div>

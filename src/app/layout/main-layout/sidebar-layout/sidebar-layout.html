@@ -1,0 +1,7 @@
+<div class="bg-[#101D3A] h-full p-4">
+    <div class="flex justify-between items-center text-white">
+        <label class="text-1xl font-bold">Categories APP</label>
+        <p-button icon="pi pi-times" severity="secondary" variant="text" (click)="isOpen.emit()"></p-button>
+    </div>
+    <p-menu [model]="menuOptions"></p-menu>
+</div>

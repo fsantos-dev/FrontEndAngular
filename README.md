@@ -1168,6 +1168,20 @@ draggable | Permite mover el diálogo. | ⭐⭐⭐
 resizable | Permite cambiar el tamaño del diálogo. | ⭐⭐⭐
 styleClass | Permite aplicar una clase CSS personalizada. | ⭐⭐⭐⭐
 
+- p-drawer
+¿Para qué se usa?
+Para mostrar un panel lateral sobre la página actual. Es muy utilizado para crear sidebars, menús de navegación y paneles laterales responsive.
+
+Propiedad | ¿Para qué sirve? | ¿La usarás mucho?
+[(visible)] | Controla si el drawer está visible. | ⭐⭐⭐⭐⭐
+position | Define desde qué lado aparece el drawer. | ⭐⭐⭐⭐⭐
+header | Define el contenido o título del drawer. | ⭐⭐⭐⭐
+modal | Bloquea la interacción con el contenido exterior. | ⭐⭐⭐⭐⭐
+dismissible | Permite cerrar haciendo clic fuera del drawer. | ⭐⭐⭐⭐⭐
+showCloseIcon | Permite mostrar u ocultar el botón de cerrar. | ⭐⭐⭐⭐
+styleClass | Permite aplicar una clase CSS personalizada. | ⭐⭐⭐⭐
+blockScroll | Evita el scroll de la página mientras el drawer está abierto. | ⭐⭐⭐⭐
+
 - p-confirmdialog
 
 ¿Para qué se usa?
@@ -1483,6 +1497,12 @@ Solucion
 
 # 18. INACTIVIDAD
 El tiempo de inactividad no debe ser igual o mayor al tiempo de expiracion del token por que si no nunca se ejecutara si el interceptor me saca siempre por expiracion de token 
+
+---
+
+# 19. PRIORIDAD Y ORDEN DE ESTILOS
+Si tenemos un padre como un layout que debe distribuir el tamano de sus componentes lo idea es que en el apdre se apliquen 
+los estilos de layout/distribucion y en los hijos demas estilos internos de diseno
 
 ---
 
