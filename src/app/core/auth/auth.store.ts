@@ -75,6 +75,7 @@ export class AuthStore {
       .subscribe({
         next: (response) => {
           this.saveSession(response);
+          this.router.navigate(['/categorias']);
         },
         error: (err: HttpErrorResponse) => {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: this.extractError(err, 'Error al iniciar sesión') });

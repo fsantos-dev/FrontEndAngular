@@ -21,11 +21,11 @@
             @if (email?.errors?.['required']) {
               <span>El correo es obligatorio</span>
             }
-            @if (email?.errors?.['email']) {
+            @else if (email?.errors?.['email']) {
               <span>El formato del email no es valido</span>
             }
-            @if (email?.errors?.['maxLength']) {
-              <span>Ingrese un correo válido</span>
+            @else if (email?.errors?.['maxlength']) {
+              <span>El nombre no puede superar los 150 caracteres</span>
             }
           </div>
         }
@@ -49,7 +49,7 @@
             @if (password?.errors?.['required']) {
               <span>La contraseña es obligatoria</span>
             }
-            @if (password?.errors?.['maxLength']) {
+            @else if (password?.errors?.['maxlength']) {
               <span>La contrasena supera la longitud permitida.</span>
             }
           </div>

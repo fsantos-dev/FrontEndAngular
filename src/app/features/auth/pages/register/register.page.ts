@@ -52,6 +52,9 @@ export class RegisterPage {
   protected get fullName() {
     return this.registerForm.controls.fullName;
   }
+  protected get email() {
+    return this.registerForm.controls.email;
+  }
   protected get password() {
     return this.registerForm.controls.password;
   }

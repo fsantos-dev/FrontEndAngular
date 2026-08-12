@@ -1481,6 +1481,11 @@ Solucion
 
 ---
 
+# 18. INACTIVIDAD
+El tiempo de inactividad no debe ser igual o mayor al tiempo de expiracion del token por que si no nunca se ejecutara si el interceptor me saca siempre por expiracion de token 
+
+---
+
 # 📌 Resumen
 
 | Tema                                                                                                                          | Opciones                                                                                                                                                                                                                                                      |

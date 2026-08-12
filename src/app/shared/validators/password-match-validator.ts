@@ -5,11 +5,21 @@ export function passwordMatchValidator(
   repeatPasswordKey: string,
 ): ValidatorFn {
   return (group: AbstractControl): ValidationErrors | null => {
-    const password = group.get(passwordKey)?.value;
-    const repeatPassword = group.get(repeatPasswordKey)?.value;
+    const passwordControl = group.get(passwordKey);
+    const repeatPasswordControl = group.get(repeatPasswordKey);
 
-    if (!password || !repeatPassword) return null;
+    if (!passwordControl || !repeatPasswordControl) return null;
 
-    return password === repeatPassword ? null : { passwordMismatch: true };
+    if (passwordControl.value !== repeatPasswordControl.value) {
+      repeatPasswordControl.setErrors({
+        ...repeatPasswordControl.errors,
+        passwordMismatch: true,
+      });
+    } else if (repeatPasswordControl.hasError('passwordMismatch')) {
+      const { passwordMismatch, ...rest } = repeatPasswordControl.errors ?? {};
+      repeatPasswordControl.setErrors(Object.keys(rest).length ? rest : null);
+    }
+
+    return null;
   };
 }
