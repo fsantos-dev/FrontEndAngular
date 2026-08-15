@@ -102,6 +102,12 @@
         [loading]="authStore.loading()"
         [disabled]="registerForm.invalid"
       />
+
+       <!-- Enlace a registro -->
+      <div class="mt-4 text-center text-sm text-gray-600">
+        ¿Ya tienes una cuenta?
+        <a routerLink="/auth/login" class="text-blue-600 hover:underline cursor-pointer">Login</a>
+      </div>
     </form>
   </p-card>
 </div>

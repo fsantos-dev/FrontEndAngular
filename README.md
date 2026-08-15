@@ -4,6 +4,12 @@
 
 ---
 
+# 0. Featured Based
+Si un componente se comparte solo dentro de un featured por ejemplo no deberiamos crearlo en shared/components
+ya que no es transversal no sale de esa carpeta y esto aplica para cada cosa que solo se usa internamente 
+
+---
+
 # 1. Data user(login)
 
 2 formas de traer toda la informacion del usuario como roles, si esta activo etc
@@ -1127,8 +1133,9 @@ lazy | Permite cargar los datos bajo demanda desde el backend. | ⭐⭐⭐⭐⭐
 onLazyLoad | Detecta cambios de página, filtros u ordenamiento para consultar al backend. | ⭐⭐⭐⭐⭐
 totalRecords | Indica la cantidad total de registros existentes en el backend. | ⭐⭐⭐⭐⭐
 first | Define el índice del primer registro mostrado. | ⭐⭐⭐⭐
+[globalFilterFields]="['name', 'description']"
 
-La diferencia es quién hace el trabajo:
+En paginacion la diferencia es quién hace el trabajo:
 
 🟢 Frontend: Angular recibe todo → PrimeNG filtra/ordena/pagina.
 🔵 Backend: Angular pide solamente lo necesario → API filtra/ordena/pagina → PrimeNG muestra el resultado.
@@ -1428,6 +1435,11 @@ No vale la pena reinventarlo.
 Recomendable tener un interceptor de logs,bpreferiblemente que rastree el response y el request de cada peticion http
 y el correspondiente error
 
+
+# 18. routes
+loadChildren = carga perezoza de hijos  /padre/cualquier-hijo
+loadComponent = carga perezoza hermanos /padre y /hermano
+
 ---
 
 ## REGLA DE ORO
@@ -1504,6 +1516,58 @@ El tiempo de inactividad no debe ser igual o mayor al tiempo de expiracion del t
 Si tenemos un padre como un layout que debe distribuir el tamano de sus componentes lo idea es que en el apdre se apliquen 
 los estilos de layout/distribucion y en los hijos demas estilos internos de diseno
 
+# 19. signals
+ojo no es lo mismo decir variableLocal = clase.miSenal = aui asignamos la senal pura si cambia el valor la variable local la va tener y variable local quedaria variableLocal()
+Que decir variableLocal = clase.miSenal() = aqui asignamos el valor de la senal y no se va avutalizar si esta cambia
+
+
+# 20. store
+ojo no todo deberia guardar en el store solo estados de la aplicacion 
+La idea principal es:
+
+Store = dueño del estado de la feature.
+Signal local = dueño del estado temporal de un componente.
+Input/Output = canal de comunicación entre componentes.
+
+Que el Store haga la operación (create, update, delete) es una señal fuerte de que el resultado de esa operación pertenece al estado de la feature, pero no significa que TODO lo relacionado con esa operación deba vivir en el Store.
+
+
+Una regla muy buena para tu arquitectura
+
+Pregúntate:
+
+¿Esto es necesario para que el Store haga su trabajo o solamente para que la UI sepa qué mostrar?
+
+Si es necesario para el trabajo de la feature:
+
+Store
+
+Si es para controlar la UI:
+
+Componente
+
+Si es para comunicar componentes:
+
+Input / Output
+
+Si componentes que no tienen una relación padre → hijo directa necesitan conocer el mismo estado, entonces sí empieza a tener sentido compartirlo mediante Store.
+
+Pero no porque "lo necesiten dos componentes".
+
+Sino porque:
+
+Es estado compartido entre partes independientes de la feature.
+
+Si existe una relación padre → hijo clara, primero intenta Input/Output.
+
+Si son componentes independientes y necesitan compartir estado, ahí considera Store.
+
+
+
+---
+
+# 20. desacoplar
+Por que por ejemplo no llamar categorySelected del store dentro del formulario de crear/editar para utilizarlo para setar cuando vaya a a editar por que estaria dependiendo de ese store no seria reutilizable el 100% de losc aos y esto mucho mas preferible para los componentes shared/components que se usan en diferentes features si es un componente que se usa en una sola feature ya sabemos que lo mejor es crealo dentro de la carpeta components dentro de ese feature y no necesita estar 100$ desacoplado
 ---
 
 # 📌 Resumen

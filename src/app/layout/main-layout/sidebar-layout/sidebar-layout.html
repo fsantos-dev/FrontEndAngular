@@ -10,13 +10,21 @@
   </div>
   <ul class="text-white">
     @for (item of menuOptions; track item.id) {
-      <li class="flex items-center gap-2 p-2 cursor-pointer rounded-lg mb-2" routerLinkActive="bg-[#477FF8]">
-        <i [class]="item.icon + ' !text-1xl'" ></i
-        ><a class="cursor-pointer" [routerLink]="item.route" >{{ item.label }}</a>
+      <li
+        class="flex items-center gap-2 cursor-pointer rounded-lg mb-2"
+        routerLinkActive="bg-[#477FF8]"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a
+          class="cursor-pointer w-full flex items-center gap-2 p-2 rounded-lg"
+          [routerLink]="item.route"
+        >
+          <i [class]="item.icon + ' !text-1xl'"></i>{{ item.label }}</a
+        >
       </li>
     }
   </ul>
   <div class="absolute bottom-5 inset-x-0 flex justify-center">
-    <label class="text-white text-sm">Version {{version}}</label>
+    <label class="text-white text-sm">Version {{ version }}</label>
   </div>
 </div>

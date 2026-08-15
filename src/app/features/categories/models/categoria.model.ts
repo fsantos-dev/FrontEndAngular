@@ -1,3 +1,5 @@
+import { FormControl } from "@angular/forms";
+
 export interface Categoria {
     id: number;
     name: string;
@@ -10,5 +12,10 @@ export interface Categoria {
 export interface CrearActualizarCategoria {
     name: string;
     description?: string | null;
+}
+
+export interface CategoryFormInterface {
+  name: FormControl<string>;
+  description: FormControl<string>;
 }
 

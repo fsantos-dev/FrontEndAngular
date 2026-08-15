@@ -1,0 +1,8 @@
+<p-card class="p-4 w-full">
+  <h2 class="text-1xl font-semibold mb-4">Nueva categoria</h2>
+  <app-category-form
+    [showCancel]="false"
+    (save)="createCategory($event)"
+    class="overflow-y-auto flex-1"
+  ></app-category-form>
+</p-card>

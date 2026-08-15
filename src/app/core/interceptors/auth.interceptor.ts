@@ -1,22 +1,33 @@
-import { inject } from "@angular/core";
-import { HttpInterceptorFn } from "@angular/common/http";
-import { TokenService } from "../auth/token.service";
+import { inject } from '@angular/core';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { TokenService } from '../auth/token.service';
 
-export const authInterceptor : HttpInterceptorFn = (req, next) => {
+const publicUrls = ['/api/auth/login', '/api/auth/register'];
 
-    const tokenService = inject(TokenService);
+// Rutas que son públicas SOLO en GET (ej: listar/ver categorías sin login)
+const publicGetUrls = ['/api/categories'];
 
-    const token = tokenService.get();
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const tokenService = inject(TokenService);
 
-    if(!token){
-        return next(req);
-    }
+  const isAlwaysPublic = publicUrls.some((url) => req.url.includes(url));
+  const isPublicGet = req.method === 'GET' && publicGetUrls.some((url) => req.url.includes(url));
 
-    const authRequest = req.clone({
-        setHeaders: {
-            Authorization: `Bearer ${token}`
-        }
-    });
+  if (isAlwaysPublic || isPublicGet) {
+    return next(req);
+  }
 
-    return next(authRequest);
-}
+  const token = tokenService.get();
+
+  if (!token) {
+    return next(req);
+  }
+
+  return next(
+    req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+  );
+};

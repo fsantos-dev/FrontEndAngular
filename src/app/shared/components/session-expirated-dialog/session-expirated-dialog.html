@@ -1,0 +1,14 @@
+<p-dialog
+  header="Sesión expirada"
+  [visible]="inactivityService.isInactive()"
+  [modal]="true"
+  [closable]="false"
+  [draggable]="false"
+  styleClass="w-[25rem]"
+>
+  <div class="flex flex-col items-center text-center gap-4">
+    <i class="pi pi-info-circle text-4xl text-red-500"></i>
+    <p class="m-0">Tu sesión ha expirado por inactividad.</p>
+    <p-button label="Aceptar" (onClick)="onSessionExpired()" />
+  </div>
+</p-dialog>

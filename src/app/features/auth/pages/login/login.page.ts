@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
   FormControl,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { AuthStore } from '../../../../core/auth/auth.store';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -15,6 +15,7 @@ import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { InputPasswordModule } from 'primeng/inputpassword';
 import { LoginForm } from '../../models/auth-model';
+
 
 
 @Component({
@@ -28,6 +29,7 @@ import { LoginForm } from '../../models/auth-model';
     PasswordModule,
     CardModule,
     InputPasswordModule,
+    RouterLink,
   ],
   templateUrl: './login.page.html',
   styleUrl: './login.page.scss',

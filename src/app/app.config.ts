@@ -7,14 +7,16 @@ import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { httpLoggerInterceptor } from './core/interceptors/http-logger.interceptor';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ngrokInterceptor } from './core/interceptors/ngrok.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     MessageService,
+    ConfirmationService,
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor, httpLoggerInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor, httpLoggerInterceptor, ngrokInterceptor])),
     providePrimeNG({
       theme: {
         preset: Aura,
