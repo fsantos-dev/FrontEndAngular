@@ -20,8 +20,8 @@ export class SidebarLayout {
   public version = APP_CONFIG.appVersion;
 
   menuOptions : MenuOption[] = [
-    { id: 1, label:'Categorias', icon:'pi pi-list', route: 'categories'},
-    { id: 2, label:'Crear categoria', icon:'pi pi-file-plus', route: 'categories/crear'},
+    { id: 1, label:'Categorias', icon:'pi pi-list', route: '/categories'},
+    { id: 2, label:'Crear categoria', icon:'pi pi-file-plus', route: '/categories/new'},
   ];
 
   close(): void {

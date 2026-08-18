@@ -7,11 +7,11 @@ import { PasswordModule } from 'primeng/password';
 import { AuthStore } from '../../../../core/auth/auth.store';
 import { RegisterForm } from '../../models/auth-model';
 import { passwordMatchValidator } from '../../../../shared/validators/password-match-validator';
-
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, ButtonModule, InputTextModule, PasswordModule, CardModule],
+  imports: [ReactiveFormsModule, ButtonModule, InputTextModule, PasswordModule, CardModule, RouterLink],
   templateUrl: './register.page.html',
   styleUrl: './register.page.scss',
 })

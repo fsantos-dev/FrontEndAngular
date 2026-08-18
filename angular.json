@@ -75,6 +75,9 @@
             "production": {
               "buildTarget": "FrontEndAngular:build:production"
             },
+            "qa": {
+              "buildTarget": "FrontEndAngular:build:qa"
+            },
             "development": {
               "buildTarget": "FrontEndAngular:build:development"
             }

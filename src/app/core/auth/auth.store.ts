@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable, Signal, computed, inject, signal } from '@angular/core';
+import { DestroyRef, Injectable, Signal, computed, effect, inject, signal } from '@angular/core';
 import { AuthService } from './auth.service';
 import { TokenService } from './token.service';
 import { LoginRequest, LoginResponse, RegisterRequest, User } from './models/auth.model';
@@ -8,10 +8,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
+import { InactivityService } from '../inactivity/inactivity.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
   private readonly router = inject(Router);
+  private readonly inactivityService = inject(InactivityService);
   private destroyRef = inject(DestroyRef);
   private readonly authService = inject(AuthService);
   private readonly messageService = inject(MessageService);
@@ -20,6 +22,7 @@ export class AuthStore {
   private readonly userService = inject(UserService);
 
   private readonly userSignal = signal<User | null>(this.userService.get());
+  private readonly tokenSignal = signal<string | null>(this.tokenService.get());
   private readonly loadingSignal = signal<boolean>(false);
   private readonly errorSignal = signal<string | null>(null);
 
@@ -27,7 +30,7 @@ export class AuthStore {
   readonly loading = this.loadingSignal.asReadonly();
   readonly error = this.errorSignal.asReadonly();
 
-  readonly isAuthenticated = computed(() => !!this.tokenService.get() && !!this.user());
+  readonly isAuthenticated = computed(() => !!this.tokenSignal() && !!this.user());
 
   private saveSession(response: LoginResponse): void {
     const user: User = {
@@ -37,8 +40,18 @@ export class AuthStore {
     };
 
     this.tokenService.set(response.token);
+    this.tokenSignal.set(response.token);
     this.userService.set(user);
     this.userSignal.set(user);
+    this.inactivityService.start();
+  }
+
+  private clearSession() {
+    this.inactivityService.stop();
+    this.userService.clear();
+    this.tokenService.clear();
+    this.userSignal.set(null);
+    this.tokenSignal.set(null);
   }
 
   login(credentials: LoginRequest): void {
@@ -57,7 +70,11 @@ export class AuthStore {
           this.router.navigate(['/categories']);
         },
         error: (err: HttpErrorResponse) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: this.extractError(err, 'Error al iniciar sesión') });
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: this.extractError(err, 'Error al iniciar sesión'),
+          });
         },
       });
   }
@@ -75,18 +92,20 @@ export class AuthStore {
       .subscribe({
         next: (response) => {
           this.saveSession(response);
-          this.router.navigate(['/categorias']);
+          this.router.navigate(['/categories']);
         },
         error: (err: HttpErrorResponse) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: this.extractError(err, 'Error al iniciar sesión') });
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: this.extractError(err, 'Error al iniciar sesión'),
+          });
         },
       });
   }
 
   logout(): void {
-    console.log('pasamos por logout')
-    this.userService.clear();
-    this.tokenService.clear();
+    this.clearSession();
     this.router.navigate(['/auth/login']);
   }
 
