@@ -5,15 +5,15 @@ import { TokenService } from '../auth/token.service';
 const publicUrls = ['/api/auth/login', '/api/auth/register'];
 
 // Rutas que son públicas SOLO en GET (ej: listar/ver categorías sin login)
-const publicGetUrls = ['/api/categories'];
+// const publicGetUrls = ['/api/categories'];
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenService = inject(TokenService);
 
   const isAlwaysPublic = publicUrls.some((url) => req.url.includes(url));
-  const isPublicGet = req.method === 'GET' && publicGetUrls.some((url) => req.url.includes(url));
+  // const isPublicGet = req.method === 'GET' && publicGetUrls.some((url) => req.url.includes(url));
 
-  if (isAlwaysPublic || isPublicGet) {
+  if (isAlwaysPublic) {
     return next(req);
   }
 
