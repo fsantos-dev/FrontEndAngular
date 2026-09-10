@@ -1,4 +1,4 @@
-import { Form, FormControl } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 
 export interface LoginForm {
   email: FormControl<string>;

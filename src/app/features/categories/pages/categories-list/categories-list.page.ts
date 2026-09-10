@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -32,7 +32,7 @@ import { Categoria, CrearActualizarCategoria } from '../../models/categoria.mode
   templateUrl: './categories-list.page.html',
   styleUrl: './categories-list.page.scss',
 })
-export class CategoriesListPage {
+export class CategoriesListPage implements OnInit {
   private categoriaStore = inject(CategoriaStore);
   private confirmationService = inject(ConfirmationService);
 
@@ -51,17 +51,21 @@ export class CategoriesListPage {
     this.showDialog.set(true);
   }
 
-  editCategoryDialog(category: Categoria){
+  editCategoryDialog(category: Categoria) {
     this.categoriaStore.select(category);
     this.showDialog.set(true);
   }
 
-  saveCategory(category: CrearActualizarCategoria) {
+  saveCategory(category: CrearActualizarCategoria): void {
     const selected = this.categorySelected();
-    selected
-      ? this.categoriaStore.update(selected.id, category)
-      : this.categoriaStore.create(category);
-      this.showDialog.set(false);
+
+    if (selected) {
+      this.categoriaStore.update(selected.id, category);
+    } else {
+      this.categoriaStore.create(category);
+    }
+
+    this.showDialog.set(false);
   }
 
   onCancel() {
@@ -69,18 +73,18 @@ export class CategoriesListPage {
     this.categoriaStore.clearSelection();
   }
 
-  deleteCategory(id: number){
+  deleteCategory(id: number) {
     this.confirmationService.confirm({
-      header:'Confirmar eliminación',
+      header: 'Confirmar eliminación',
       message: `¿Estás seguro que deseas eliminar la categoria ${id}? Esta accion no se puede deshacer.`,
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Si, eliminar',
       rejectLabel: 'Cancelar',
       acceptButtonStyleClass: 'p-button-danger',
       rejectButtonStyleClass: 'p-button-text',
-      accept: ()=> {
+      accept: () => {
         this.categoriaStore.delete(id);
-      }
+      },
     });
   }
 }

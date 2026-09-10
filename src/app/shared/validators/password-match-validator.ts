@@ -16,8 +16,9 @@ export function passwordMatchValidator(
         passwordMismatch: true,
       });
     } else if (repeatPasswordControl.hasError('passwordMismatch')) {
-      const { passwordMismatch, ...rest } = repeatPasswordControl.errors ?? {};
-      repeatPasswordControl.setErrors(Object.keys(rest).length ? rest : null);
+      const errors = { ...repeatPasswordControl.errors };
+      delete errors['passwordMismatch'];
+      repeatPasswordControl.setErrors(Object.keys(errors).length ? errors : null);
     }
 
     return null;
