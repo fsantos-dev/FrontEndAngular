@@ -12,9 +12,9 @@ import { CategoriaStore } from '../../store/categoria.store';
   templateUrl: './category-form.html',
   styleUrl: './category-form.scss',
 })
-export class CategoryForm {
+export class CategoryForm{
   readonly save = output<CrearActualizarCategoria>();
-  readonly cancel = output<void>();
+  readonly cancelForm = output<void>();
   readonly showCancel = input<boolean>(false);
 
   private readonly categoryStore = inject(CategoriaStore);
@@ -62,25 +62,12 @@ export class CategoryForm {
     // }
   }
 
-  ngOnInit() {
-    console.log('ENTRAMOS A EDITAR');
-    if (this.selected()) {
-      console.log('ENTRAMOS A EDITAR 2');
-      this.categoryForm.patchValue({
-        name: this.selected()?.name,
-        description: this.selected()?.description || '',
-      });
-    } else {
-      this.categoryForm.reset();
-    }
-  }
-
   protected get name() {
     return this.categoryForm.controls.name;
   }
 
   protected get description() {
-    return (this, this.categoryForm.controls.description);
+    return this.categoryForm.controls.description;
   }
 
   CreateCategory() {
@@ -88,7 +75,7 @@ export class CategoryForm {
     if (this.categoryForm.invalid) {
       return;
     }
-    let category = this.categoryForm.getRawValue();
+    const category = this.categoryForm.getRawValue();
     this.save.emit(category);
   }
 
@@ -98,6 +85,6 @@ export class CategoryForm {
 
   onCancel(): void {
     this.categoryForm.reset();
-    this.cancel.emit();
+    this.cancelForm.emit();
   }
 }

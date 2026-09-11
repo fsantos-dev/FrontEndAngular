@@ -1,7 +1,7 @@
 <div>
   <form [formGroup]="categoryForm" (ngSubmit)="CreateCategory()" class="flex flex-col gap-4">
     <div class="mb-2">
-      <label class="block text-sm font-medium text-gray-700 mb-1">Nombre categoria</label>
+      <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre categoria</label>
       <input
         id="name"
         formControlName="name"
@@ -21,7 +21,7 @@
       }
     </div>
     <div class="mb-2">
-      <label class="block text-sm font-medium text-gray-700 mb-1">Descripcion categoria</label>
+      <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Descripcion categoria</label>
       <input
         id="description"
         formControlName="description"

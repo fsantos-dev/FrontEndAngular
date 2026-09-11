@@ -11,7 +11,14 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, ButtonModule, InputTextModule, PasswordModule, CardModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    ButtonModule,
+    InputTextModule,
+    PasswordModule,
+    CardModule,
+    RouterLink,
+  ],
   templateUrl: './register.page.html',
   styleUrl: './register.page.scss',
 })
@@ -45,7 +52,14 @@ export class RegisterPage {
     this.registerForm.markAllAsTouched();
     if (this.registerForm.invalid) return;
 
-    const { repeatPassword, ...registerData } = this.registerForm.getRawValue();
+    const formData = this.registerForm.getRawValue();
+
+    const registerData = {
+      fullName: formData.fullName,
+      email: formData.email,
+      password: formData.password,
+    };
+    
     this.authStore.register(registerData);
   }
 

@@ -3,7 +3,7 @@
     <div class="text-center text-2xl font-bold mb-6">Registrarse</div>
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
+        <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
         <input
           id="fullName"
           type="text"
@@ -21,7 +21,7 @@
         }
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
         <input
           id="email"
           type="email"
@@ -45,7 +45,7 @@
         }
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Contrasena</label>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Contrasena</label>
         <p-password
           id="password"
           formControlName="password"
@@ -68,7 +68,7 @@
         }
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Repite la contrasena</label>
+        <label for="repeatPassword" class="block text-sm font-medium text-gray-700 mb-1">Repite la contrasena</label>
         <p-password
           id="repeatPassword"
           formControlName="repeatPassword"

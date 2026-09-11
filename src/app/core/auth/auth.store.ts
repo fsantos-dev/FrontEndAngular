@@ -1,4 +1,4 @@
-import { DestroyRef, Injectable, Signal, computed, effect, inject, signal } from '@angular/core';
+import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
 import { AuthService } from './auth.service';
 import { TokenService } from './token.service';
 import { LoginRequest, LoginResponse, RegisterRequest, User } from './models/auth.model';
